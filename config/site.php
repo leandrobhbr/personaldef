@@ -1,0 +1,352 @@
+<?php
+
+return [
+
+    /*
+    |--------------------------------------------------------------------------
+    | Dados de contato
+    |--------------------------------------------------------------------------
+    |
+    | Valores exibidos no site. Os textos entre colchetes são marcadores para
+    | serem trocados pelos dados reais (via .env ou direto aqui).
+    |
+    */
+
+    'whatsapp' => env('SITE_WHATSAPP', '5514996295320'),
+    'whatsapp_display' => env('SITE_WHATSAPP_DISPLAY', '(14) 99629-5320'),
+    'whatsapp_message' => 'Olá Denilson!',
+
+    // Modal do WhatsApp: "O que você procura?" (a chave vai em data-wa-tipo nos botões)
+    'whatsapp_opcoes' => [
+        // [título, subtítulo, ícone, texto que vai na mensagem]
+        'presencial' => ['Personal Trainer presencial', 'Atendimento individual em Marília/SP', 'local', 'Personal Trainer presencial em Marília/SP'],
+        'online' => ['Assessoria esportiva online', 'Com criação de fichas personalizadas · todo o Brasil', 'celular', 'Assessoria esportiva online com criação de fichas'],
+    ],
+    'instagram' => env('SITE_INSTAGRAM', 'https://www.instagram.com/blackdef79/'),
+    'instagram_display' => env('SITE_INSTAGRAM_DISPLAY', '@blackdef79'),
+    'city' => 'Marília/SP',
+    'domain' => 'personaldef.com.br',
+
+    // Cor de destaque do layout (o mockup também testou #FF7A1A, #C6FF00 e #FFD400)
+    'accent' => '#E4FF3A',
+
+    // Quem atende
+    'owner_name' => 'Denilson Ferreira',
+    'cref' => '201019-G/SP',
+    'owner_role' => 'Personal Trainer - CREF 201019-G/SP',
+    // Foto do hero (vazio = mostra o espaço reservado do layout); precisa de boa resolução (mín. ~900x1100)
+    'owner_photo' => 'images/denilson.webp',
+
+    // Google Analytics 4 (só é carregado com APP_ENV=production)
+    'ga_id' => env('SITE_GA_ID'),
+
+    // Código de verificação do Google Search Console (meta tag), opcional
+    'google_verification' => env('SITE_GOOGLE_VERIFICATION'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Formação (seção Sobre)
+    |--------------------------------------------------------------------------
+    */
+
+    'formacao' => [
+        [
+            'icon' => 'halter',
+            'tag' => 'Especialista Internacional',
+            'title' => 'Musculação e Cardio Fitness',
+            'where' => 'Orthos Barcelona · IFAD Portugal',
+        ],
+        [
+            'icon' => 'folha',
+            'tag' => 'Nutrição e Dietética',
+            'title' => 'Técnico Experto em Dietoterapia, Nutrição Esportiva e Dietética',
+            'where' => 'Sevilla e Valência · Espanha',
+        ],
+        [
+            'icon' => 'coracao',
+            'tag' => 'Terapias e Bem-Estar',
+            'title' => 'Quiromassagem · Naturopatia e Fitoterapia Aplicada',
+            'where' => 'Escola de Enfermagem de Valência · Espanha',
+        ],
+        [
+            'icon' => 'trofeu',
+            'tag' => 'Modalidades',
+            'title' => 'Treinador Culturista · Pilates · Cardiobox · Step',
+            'where' => 'Fisiculturismo e monitoria · Espanha',
+        ],
+    ],
+
+    // Fotos da Espanha e de Portugal (Wikimedia Commons, CC BY-SA: o crédito ao autor é obrigatório)
+    'europa' => [
+        [
+            'image' => 'images/europa/barcelona-park-guell.webp',
+            'alt' => 'Park Güell, em Barcelona, com a cidade e o mar ao fundo',
+            'country' => 'Espanha',
+            'city' => 'Barcelona',
+            'author' => 'Bernard Gagnon',
+            'source' => 'https://commons.wikimedia.org/wiki/File:Park_G%C3%BCell_02.jpg',
+            'license' => 'CC BY-SA 3.0',
+            'license_url' => 'https://creativecommons.org/licenses/by-sa/3.0/deed.pt-br',
+        ],
+        [
+            'image' => 'images/europa/lisboa-rua-augusta.webp',
+            'alt' => 'Arco da Rua Augusta, na Praça do Comércio, em Lisboa',
+            'country' => 'Portugal',
+            'city' => 'Lisboa',
+            'author' => 'Diego Delso',
+            'source' => 'https://commons.wikimedia.org/wiki/File:Arco_Triunfal_da_Rua_Augusta,_Plaza_del_Comercio,_Lisboa,_Portugal,_2012-05-12,_DD_02.JPG',
+            'license' => 'CC BY-SA 3.0',
+            'license_url' => 'https://creativecommons.org/licenses/by-sa/3.0/deed.pt-br',
+        ],
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Serviços e planos
+    |--------------------------------------------------------------------------
+    */
+
+    'servicos' => [
+        [
+            'icon' => 'celular',
+            'badge' => 'Todo o Brasil',
+            'title' => 'Consultoria de Treino Online',
+            'text' => 'Fichas de treino montadas do zero para você, entregues em formato digital e explicativo. Treine onde estiver, no seu horário, com a segurança de saber exatamente o que fazer.',
+            'items' => [
+                'Treino 100% individualizado',
+                'Séries, repetições, descanso e execução passo a passo',
+                'Praticidade: academia, condomínio ou em casa',
+            ],
+            'cta' => 'Solicitar orçamento',
+            'tipo' => 'online',
+            'message' => 'Olá Denilson! Quero solicitar um orçamento da Consultoria de Treino Online.',
+        ],
+        [
+            'icon' => 'local',
+            'badge' => 'Marília/SP',
+            'title' => 'Personal Trainer Presencial',
+            'text' => 'Atendimento exclusivo, lado a lado, com correção técnica em cada repetição. Para quem quer o máximo de atenção, segurança e resultado em Marília/SP.',
+            'items' => [
+                'Acompanhamento individual em cada sessão',
+                'Correção de postura e execução em tempo real',
+                'Treino, nutrição e bem-estar integrados',
+            ],
+            'cta' => 'Solicitar orçamento',
+            'tipo' => 'presencial',
+            'message' => 'Olá Denilson! Quero solicitar um orçamento do Personal Trainer Presencial em Marília.',
+        ],
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Como funciona a consultoria
+    |--------------------------------------------------------------------------
+    */
+
+    'passos' => [
+        ['Chame no WhatsApp', 'Nosso assistente agenda automaticamente sua conversa inicial, no horário que for melhor para você.'],
+        ['Avaliação completa', 'Mapeamos sua rotina, histórico, limitações, lesões, equipamentos disponíveis e o objetivo que você quer alcançar.'],
+        ['Ficha montada do zero', 'Denilson desenha seu plano com a metodologia europeia — nada de modelo pronto ou ficha genérica.'],
+        ['Receba e treine', 'Sua ficha chega em formato digital e explicativo, pronta para usar no celular durante o treino.'],
+    ],
+
+    'ficha' => [
+        ['halter', 'Nome de cada exercício'],
+        ['lista', 'Séries e repetições'],
+        ['relogio', 'Tempo de descanso'],
+        ['execucao', 'Execução passo a passo'],
+    ],
+
+    // Ficha de exemplo mostrada no celular da seção "Como funciona"
+    'ficha_exemplo' => [
+        'treino' => 'Treino A',
+        'foco' => 'Peito e tríceps',
+        'semana' => 'Semana 3 de 8',
+        'exercicios' => [
+            ['Supino reto com barra', 4, '8–10', '90s', null],
+            ['Supino inclinado com halteres', 3, '10–12', '75s', null],
+            ['Crucifixo na máquina', 3, '12', '60s', 'Cotovelos levemente flexionados; feche os braços em 2 segundos e volte devagar, sem deixar o peso bater.'],
+            ['Tríceps na polia com corda', 3, '12–15', '60s', null],
+            ['Tríceps francês com halter', 3, '10–12', '60s', null],
+        ],
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Tipos de ficha de treino
+    |--------------------------------------------------------------------------
+    |
+    | Cada dia: [rótulo, grupos, foto, enquadramento (object-position)].
+    | Fotos do Wikimedia Commons; créditos em 'fichas_creditos'.
+    |
+    */
+
+    'tipos_ficha' => [
+        [
+            'title' => 'Full Body',
+            'subtitle' => 'Corpo inteiro',
+            'days' => [
+                ['Todos', 'Corpo todo', 'images/fichas/full-body.webp', '50% 35%'],
+            ],
+            'what' => 'Todos os grandes grupos musculares no mesmo treino.',
+            'freq' => '2 a 3 vezes por semana',
+            'who' => 'Iniciantes, quem tem pouco tempo ou está voltando a treinar.',
+        ],
+        [
+            'title' => 'AB',
+            'subtitle' => 'Superior e inferior (ou Push/Pull)',
+            'days' => [
+                ['A', 'Superiores', 'images/fichas/superiores.webp', '50% 30%'],
+                ['B', 'Inferiores', 'images/fichas/inferiores.webp', '50% 25%'],
+            ],
+            'what' => 'Superiores em um dia e inferiores no outro (ou empurrar e puxar).',
+            'freq' => '2 a 4 vezes por semana',
+            'who' => 'Iniciantes em evolução e intermediários com rotina apertada.',
+        ],
+        [
+            'title' => 'ABC',
+            'subtitle' => 'Três treinos diferentes',
+            'days' => [
+                ['A', 'Peito e tríceps', 'images/fichas/peito-triceps.webp', '50% 40%'],
+                ['B', 'Costas e bíceps', 'images/fichas/costas-biceps.webp', '50% 40%'],
+                ['C', 'Pernas e ombros', 'images/fichas/pernas-ombros.webp', '40% 50%'],
+            ],
+            'what' => 'Três treinos diferentes, como peito e tríceps, costas e bíceps, pernas e ombros.',
+            'freq' => '3 a 5 vezes por semana',
+            'who' => 'Intermediários com foco em hipertrofia.',
+        ],
+        [
+            'title' => 'Push / Pull / Legs',
+            'subtitle' => 'Empurrar / Puxar / Pernas',
+            'days' => [
+                ['Push', 'Peito, ombro, tríceps', 'images/fichas/push.webp', '50% 60%'],
+                ['Pull', 'Costas e bíceps', 'images/fichas/pull.webp', '50% 40%'],
+                ['Legs', 'Pernas completas', 'images/fichas/legs.webp', '45% 60%'],
+            ],
+            'what' => 'Treinos pelo tipo de movimento: empurrar, puxar e pernas.',
+            'freq' => '3 a 6 vezes por semana',
+            'who' => 'Intermediários e avançados que querem otimizar o descanso muscular.',
+        ],
+        [
+            'title' => 'ABCD ou ABCDE',
+            'subtitle' => 'Um grupo por dia',
+            'days' => [
+                ['A', 'Peito', 'images/fichas/peito.webp', '50% 60%'],
+                ['B', 'Costas', 'images/fichas/costas.webp', '50% 40%'],
+                ['C', 'Ombros', 'images/fichas/ombros.webp', '50% 30%'],
+                ['D', 'Braços', 'images/fichas/bracos.webp', '35% 40%'],
+                ['E', 'Pernas', 'images/fichas/pernas.webp', '55% 60%'],
+            ],
+            'what' => 'Um grupo muscular por dia: peito, costas, ombros, braços e pernas.',
+            'freq' => '4 a 6 vezes por semana',
+            'who' => 'Intermediários e avançados que treinam com alta intensidade.',
+        ],
+    ],
+
+    // Créditos das fotos dos tipos de ficha (CC BY / CC BY-SA exigem citar o autor e a licença)
+    'fichas_creditos' => [
+        ['Nenad Stojkovic', 'CC BY 2.0', 'https://creativecommons.org/licenses/by/2.0/deed.pt-br'],
+        ['Tyler Read', 'CC BY 2.0', 'https://creativecommons.org/licenses/by/2.0/deed.pt-br'],
+        ['Abooyeah', 'CC BY-SA 4.0', 'https://creativecommons.org/licenses/by-sa/4.0/deed.pt-br'],
+        ['David Shankbone', 'CC BY-SA 3.0', 'https://creativecommons.org/licenses/by-sa/3.0/deed.pt-br'],
+        ['OliverSeitz, U.S. Air Force e U.S. Marine Corps', 'domínio público', null],
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Saúde: condições que exigem ficha individualizada
+    |--------------------------------------------------------------------------
+    |
+    | Cada grupo: foto, enquadramento e as condições [nome, o que a ficha precisa].
+    |
+    */
+
+    'saude' => [
+        [
+            'title' => 'Condições musculoesqueléticas e articulares',
+            'image' => 'images/saude/musculoesqueleticas.webp',
+            'pos' => '50% 50%',
+            'intro' => 'Exercícios, amplitude e carga ajustados para proteger as articulações.',
+            'items' => [
+                ['Hérnia de disco', 'sem compressão na coluna; foco no core.'],
+                ['Artrose e artrite', 'baixo impacto e amplitude sem dor.'],
+                ['Escoliose', 'exercícios unilaterais contra assimetrias.'],
+                ['Tendinites e ligamentos', 'transição segura da fisioterapia.'],
+            ],
+        ],
+        [
+            'title' => 'Doenças cardiovasculares e metabólicas',
+            'image' => 'images/saude/cardiovasculares.webp',
+            'pos' => '50% 45%',
+            'intro' => 'Pressão e frequência cardíaca sob controle em cada série.',
+            'items' => [
+                ['Hipertensão', 'sem prender a respiração; pausas adequadas.'],
+                ['Diabetes', 'treino alinhado à alimentação e à medicação.'],
+                ['Cardiopatias', 'limite de frequência cardíaca e progressão gradual.'],
+            ],
+        ],
+        [
+            'title' => 'Sobrecarga mecânica',
+            'image' => 'images/saude/sobrecarga.webp',
+            'pos' => '50% 50%',
+            'intro' => 'Quando o próprio peso já sobrecarrega as articulações.',
+            'items' => [
+                ['Obesidade grave', 'sem impacto; aparelhos e posições adaptados.'],
+            ],
+        ],
+        [
+            'title' => 'Condições sistêmicas e autoimunes',
+            'image' => 'images/saude/sistemicas.webp',
+            'pos' => '50% 40%',
+            'intro' => 'Tolerância ao esforço variável e movimentos contraindicados.',
+            'items' => [
+                ['Fibromialgia', 'volume reduzido e intensidade moderada.'],
+                ['Osteoporose', 'sem torções bruscas; carga que fortalece os ossos.'],
+            ],
+        ],
+    ],
+
+    'saude_creditos' => [
+        ['Shixart1985', 'CC BY 2.0', 'https://creativecommons.org/licenses/by/2.0/deed.pt-br'],
+        ['Gary Bembridge', 'CC BY 2.0', 'https://creativecommons.org/licenses/by/2.0/deed.pt-br'],
+        ['YitzhakNat', 'CC0', null],
+        ['Bill Branson', 'domínio público', null],
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Blog
+    |--------------------------------------------------------------------------
+    */
+
+    'posts_creditos' => [
+        ['Abooyeah', 'CC BY-SA 4.0', 'https://creativecommons.org/licenses/by-sa/4.0/deed.pt-br'],
+        ['Ella Olsson', 'CC BY 2.0', 'https://creativecommons.org/licenses/by/2.0/deed.pt-br'],
+        ['Nenad Stojkovic', 'CC BY 2.0', 'https://creativecommons.org/licenses/by/2.0/deed.pt-br'],
+    ],
+
+    'posts' => [
+        [
+            'title' => '3 erros que travam a hipertrofia',
+            'image' => 'images/blog/erros-hipertrofia.webp',
+            'category' => 'Treino',
+            'reading' => 5,
+            'excerpt' => 'Volume mal distribuído, descanso errado e falta de progressão: veja como destravar seu ganho de massa.',
+        ],
+        [
+            'title' => 'Como manter a dieta na rotina corrida',
+            'image' => 'images/blog/dieta-rotina.webp',
+            'category' => 'Nutrição',
+            'reading' => 4,
+            'excerpt' => 'Planejamento simples, marmitas inteligentes e escolhas fora de casa que não sabotam seu resultado.',
+        ],
+        [
+            'title' => 'Treinar com dor nas costas: o que fazer (e evitar)',
+            'image' => 'images/blog/dor-nas-costas.webp',
+            'category' => 'Saúde',
+            'reading' => 6,
+            'excerpt' => 'Como adaptar o treino a limitações e fortalecer a região com segurança e orientação profissional.',
+        ],
+    ],
+
+];

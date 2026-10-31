@@ -1,0 +1,14 @@
+services:
+  app:
+    build:
+      context: .
+      args:
+        UID: ${UID:-1000}
+        GID: ${GID:-1000}
+    image: personaldef-php85
+    container_name: php8_personaldef
+    ports:
+      - "8086:80"
+    volumes:
+      - ./:/var/www/html
+    restart: unless-stopped
