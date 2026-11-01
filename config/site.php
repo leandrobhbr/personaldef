@@ -40,6 +40,9 @@ return [
     // Google Analytics 4 (só é carregado com APP_ENV=production)
     'ga_id' => env('SITE_GA_ID'),
 
+    // Senha da página /previa, que mostra os depoimentos de exemplo só para quem a digitar (vazio = desligada)
+    'previa_senha' => env('SITE_PREVIA_SENHA'),
+
     // Código de verificação do Google Search Console (meta tag), opcional
     'google_verification' => env('SITE_GOOGLE_VERIFICATION'),
 
@@ -311,6 +314,25 @@ return [
         ['Gary Bembridge', 'CC BY 2.0', 'https://creativecommons.org/licenses/by/2.0/deed.pt-br'],
         ['YitzhakNat', 'CC0', null],
         ['Bill Branson', 'domínio público', null],
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Depoimentos (home)
+    |--------------------------------------------------------------------------
+    |
+    | texto, nome, contexto, foto (opcional; só com autorização da pessoa, em
+    | public/images/depoimentos; sem foto, mostra as iniciais) e fotos (opcional:
+    | abertas em slide pelo botão "Veja fotos").
+    | 'exemplo' => true: nomes e avatares fictícios, só para ver o layout no
+    | ambiente local; NUNCA aparecem em produção. Troque pelos depoimentos reais.
+    |
+    */
+
+    'depoimentos' => [
+        ['exemplo' => true, 'texto' => 'Em 5 meses de consultoria online perdi 9 kg sem largar a rotina. O Denilson ajusta a ficha toda semana e responde rápido pelo WhatsApp.', 'nome' => 'Camila Rocha', 'contexto' => 'Consultoria online · Curitiba/PR', 'foto' => 'images/depoimentos/exemplo-1.svg', 'fotos' => ['images/blog/dieta-rotina.webp', 'images/fichas/pernas.webp', 'images/academia.webp']],
+        ['exemplo' => true, 'texto' => 'Voltei a treinar depois de uma lesão no joelho. Com o Denilson do lado corrigindo cada execução, ganhei força sem dor nenhuma.', 'nome' => 'Rafael Mendes', 'contexto' => 'Personal presencial · Marília/SP', 'foto' => 'images/depoimentos/exemplo-2.svg', 'fotos' => ['images/academia.webp', 'images/fichas/inferiores.webp', 'images/saude/musculoesqueleticas.webp', 'images/blog/erros-hipertrofia.webp']],
+        ['exemplo' => true, 'texto' => 'Tenho pressão alta e medo de exagerar. A ficha individualizada do Denilson me deu segurança, e hoje treino 4 vezes por semana.', 'nome' => 'Sônia Prado', 'contexto' => 'Ficha de saúde · Marília/SP', 'foto' => 'images/depoimentos/exemplo-3.svg', 'fotos' => ['images/saude/cardiovasculares.webp', 'images/saude/sistemicas.webp', 'images/saude/sobrecarga.webp', 'images/blog/dor-nas-costas.webp']],
     ],
 
     /*

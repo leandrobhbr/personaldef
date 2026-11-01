@@ -68,13 +68,72 @@
     });
   }
 
+  // Slide de fotos dos depoimentos: botões [data-galeria] trazem a lista de fotos em JSON
+  var lb = document.getElementById('galeria-modal');
+  if (lb) {
+    var lbFotos = [], lbAtual = 0, lbOrigem = null, lbToqueX = null;
+    var lbImg = lb.querySelector('[data-lb-img]');
+    var lbMinis = lb.querySelector('[data-lb-miniaturas]');
+    var lbMostra = function (i) {
+      lbAtual = (i + lbFotos.length) % lbFotos.length;
+      lbImg.src = lbFotos[lbAtual].src;
+      lbImg.alt = lbFotos[lbAtual].alt || '';
+      lb.querySelector('[data-lb-cont]').textContent = (lbAtual + 1) + ' / ' + lbFotos.length;
+      lbMinis.querySelectorAll('.lb-mini').forEach(function (m, k) { m.setAttribute('aria-current', String(k === lbAtual)); });
+      lb.querySelector('[data-lb-ant]').hidden = lb.querySelector('[data-lb-prox]').hidden = lbFotos.length < 2;
+    };
+    var lbToggle = function (aberto) {
+      lb.hidden = !aberto;
+      document.body.classList.toggle('wam-open', aberto);
+      if (!aberto && lbOrigem) lbOrigem.focus();
+    };
+    document.querySelectorAll('[data-galeria]').forEach(function (botao) {
+      botao.addEventListener('click', function () {
+        lbOrigem = botao;
+        lbFotos = JSON.parse(botao.dataset.galeria);
+        lb.querySelector('[data-lb-titulo]').textContent = botao.dataset.galeriaTitulo || '';
+        lbMinis.innerHTML = '';
+        lbFotos.forEach(function (f, k) {
+          var m = document.createElement('button');
+          m.type = 'button';
+          m.className = 'lb-mini';
+          m.setAttribute('aria-label', 'Foto ' + (k + 1));
+          m.innerHTML = '<img src="' + f.src + '" alt="" loading="lazy">';
+          m.addEventListener('click', function () { lbMostra(k); });
+          lbMinis.appendChild(m);
+        });
+        lbMostra(0);
+        lbToggle(true);
+        lb.querySelector('[data-lb-prox]').focus({ preventScroll: true });
+      });
+    });
+    lb.querySelectorAll('[data-lb-close]').forEach(function (b) { b.addEventListener('click', function () { lbToggle(false); }); });
+    lb.querySelector('[data-lb-ant]').addEventListener('click', function () { lbMostra(lbAtual - 1); });
+    lb.querySelector('[data-lb-prox]').addEventListener('click', function () { lbMostra(lbAtual + 1); });
+    document.addEventListener('keydown', function (e) {
+      if (lb.hidden) return;
+      if (e.key === 'Escape') lbToggle(false);
+      if (e.key === 'ArrowLeft') lbMostra(lbAtual - 1);
+      if (e.key === 'ArrowRight') lbMostra(lbAtual + 1);
+    });
+    // deslizar com o dedo no celular
+    var palco = lb.querySelector('.lb-palco');
+    palco.addEventListener('touchstart', function (e) { lbToqueX = e.touches[0].clientX; }, { passive: true });
+    palco.addEventListener('touchend', function (e) {
+      if (lbToqueX === null) return;
+      var dx = e.changedTouches[0].clientX - lbToqueX;
+      if (Math.abs(dx) > 40) lbMostra(lbAtual + (dx < 0 ? 1 : -1));
+      lbToqueX = null;
+    });
+  }
+
   // Animações ao rolar: cada bloco aparece quando entra na tela, em cascata entre irmãos
   if (document.documentElement.classList.contains('reveal') && 'IntersectionObserver' in window) {
     var grupos = [
       ['.hero > div:first-child > *', ''],
       ['.photo', 'direita'],
       ['.sec .tag, .sec .h2, .sec .lead, .sec > div > p', ''],
-      ['#sobre .grid > .card, .grid > .plan, .steps > li, .tipos > .tipo, #saude .grid > .cond, .sinais > *, #blog .grid > .post', ''],
+      ['#sobre .grid > .card, .grid > .plan, .steps > li, .tipos > .tipo, #saude .grid > .cond, .sinais > *, #blog .grid > .post, #depoimentos .grid > .depo', ''],
       ['.trip, .gym', 'zoom'],
       ['.ficha, .cel-wrap, .fala, .saude-cta, .cta', '']
     ];

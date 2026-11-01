@@ -255,6 +255,57 @@
 
 </section>
 
+<!-- DEPOIMENTOS (exemplos só aparecem fora de produção ou na prévia com senha; veja config/site.php) -->
+@php
+  $previa = session('previa', false);
+  $depoimentos = collect(config('site.depoimentos'))->reject(fn ($d) => ! empty($d['exemplo']) && app()->isProduction() && ! $previa);
+@endphp
+@if ($depoimentos->isNotEmpty())
+<section id="depoimentos" class="wrap sec" style="display: flex; flex-direction: column; gap: 48px">
+  <div style="display: flex; flex-direction: column; gap: 14px; max-width: 640px">
+    <span class="tag">Depoimentos</span>
+    <h2 class="h2">Quem treina com o DEF aprova.</h2>
+    @if ($previa)
+      <p class="previa-faixa">Modo prévia · depoimentos ilustrativos, visíveis só para quem tem a senha · <a href="{{ route('previa.sair') }}">Sair da prévia</a></p>
+    @endif
+  </div>
+  <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); gap: 24px">
+    @foreach ($depoimentos as $depoimento)
+      <figure class="depo">
+        <div class="depo-estrelas" role="img" aria-label="Nota 5 de 5">
+          @foreach (range(1, 5) as $estrela)
+            <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.3l-5.9 3.3 1.3-6.6-4.9-4.6 6.6-.8z" fill="currentColor"></path></svg>
+          @endforeach
+        </div>
+        <blockquote><p>“{{ $depoimento['texto'] }}”</p></blockquote>
+        @if (! empty($depoimento['fotos']))
+          @php
+            $galeria = collect($depoimento['fotos'])->map(fn ($f) => ['src' => asset($f).'?v='.@filemtime(public_path($f)), 'alt' => $depoimento['contexto']])->values();
+          @endphp
+          <button type="button" class="depo-ver" data-galeria="{{ $galeria->toJson(JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) }}" data-galeria-titulo="{{ $depoimento['nome'] }} · {{ $depoimento['contexto'] }}">
+            @include('partials.icons.icon', ['name' => 'fotos', 'size' => 18])
+            Veja fotos
+          </button>
+        @endif
+        <figcaption>
+          @if (! empty($depoimento['foto']))
+            <img class="depo-foto" src="{{ asset($depoimento['foto']) }}" alt="{{ $depoimento['nome'] }}" width="56" height="56" loading="lazy">
+          @else
+            <span class="depo-foto depo-iniciais" aria-hidden="true">{{ collect(explode(' ', $depoimento['nome']))->filter()->take(2)->map(fn ($p) => mb_strtoupper(mb_substr($p, 0, 1)))->implode('') }}</span>
+          @endif
+          <span>
+            <strong>{{ $depoimento['nome'] }}</strong>
+            <small>{{ $depoimento['contexto'] }}</small>
+          </span>
+        </figcaption>
+      </figure>
+    @endforeach
+  </div>
+</section>
+
+@include('partials.galeria-modal')
+@endif
+
 <!-- BLOG -->
 <section id="blog" class="wrap sec" style="display: flex; flex-direction: column; gap: 48px">
   <div style="display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-end; justify-content: space-between">

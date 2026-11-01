@@ -14,6 +14,9 @@
       'local' => '<path d="M12 22s7-6.2 7-12a7 7 0 0 0-14 0c0 5.8 7 12 7 12z"></path><circle cx="12" cy="10" r="2.5"></circle>',
       'lista' => '<path d="M4 6h16M4 12h16M4 18h10"></path>',
       'relogio' => '<circle cx="12" cy="13" r="8"></circle><path d="M12 9v4l2.5 2.5M9 2h6"></path>',
+      'fotos' => '<rect x="3" y="5" width="18" height="14" rx="2"></rect><circle cx="9" cy="10" r="1.6"></circle><path d="M21 16l-5-5-8 8"></path>',
+      'anterior' => '<path d="M15 5l-7 7 7 7"></path>',
+      'proxima' => '<path d="M9 5l7 7-7 7"></path>',
       'execucao' => '<path d="M9 5H5v4M15 5h4v4M9 19H5v-4M15 19h4v-4"></path><path d="M10 12h4"></path>',
   ];
 @endphp
