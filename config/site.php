@@ -52,54 +52,64 @@ return [
     |--------------------------------------------------------------------------
     */
 
+    // Diplomas (fotos tratadas em public/images/diplomas), abertos em slide pelos cartões de formação
+    'diplomas' => [
+        'orthos-musculacion' => ['Monitor de Musculação', 'Orthos · Barcelona, 2008'],
+        'orthos-fitness' => ['Monitor de Fitness', 'Orthos · Barcelona, 2008'],
+        'entrenador-personal' => ['Personal Trainer (Entrenador Personal)', 'Life Santé · Sevilha'],
+        'culturismo-musculacion' => ['Professor e Treinador de Culturismo e Musculação', 'Life Santé · Sevilha'],
+        'life-pilates' => ['Monitor de Pilates', 'Life Santé · Sevilha, 2009'],
+        'cardiobox' => ['Monitor de Cardiobox', 'Life Santé · Sevilha'],
+        'aerobic-step' => ['Técnico em Aeróbica e Step', 'Life Santé · Sevilha'],
+        'dietoterapia' => ['Técnico em Dietoterapia e Suplementação Natural', 'Life Santé · Sevilha'],
+        'fitoterapia' => ['Fitoterapia Aplicada ao Esporte', 'Life Santé · Sevilha'],
+        'naturopatia' => ['Naturopatia', 'Life Santé · Sevilha'],
+    ],
+
     'formacao' => [
         [
             'icon' => 'halter',
             'tag' => 'Especialista Internacional',
             'title' => 'Musculação e Cardio Fitness',
             'where' => 'Orthos Barcelona · IFAD Portugal',
+            'diplomas' => ['orthos-musculacion', 'orthos-fitness', 'entrenador-personal'],
         ],
         [
             'icon' => 'folha',
-            'tag' => 'Nutrição e Dietética',
+            'tag' => 'Formação complementar',
             'title' => 'Técnico Experto em Dietoterapia, Nutrição Esportiva e Dietética',
             'where' => 'Sevilla e Valência · Espanha',
+            'diplomas' => ['dietoterapia'],
         ],
         [
             'icon' => 'coracao',
             'tag' => 'Terapias e Bem-Estar',
             'title' => 'Quiromassagem · Naturopatia e Fitoterapia Aplicada',
             'where' => 'Escola de Enfermagem de Valência · Espanha',
+            'diplomas' => ['naturopatia', 'fitoterapia'],
         ],
         [
             'icon' => 'trofeu',
             'tag' => 'Modalidades',
             'title' => 'Treinador Culturista · Pilates · Cardiobox · Step',
             'where' => 'Fisiculturismo e monitoria · Espanha',
+            'diplomas' => ['culturismo-musculacion', 'life-pilates', 'cardiobox', 'aerobic-step'],
         ],
     ],
 
-    // Fotos da Espanha e de Portugal (Wikimedia Commons, CC BY-SA: o crédito ao autor é obrigatório)
+    // Fotos do Denilson na Espanha (próprias; se usar foto de banco, preencha author/source/license para o crédito)
     'europa' => [
         [
-            'image' => 'images/europa/barcelona-park-guell.webp',
-            'alt' => 'Park Güell, em Barcelona, com a cidade e o mar ao fundo',
+            'image' => 'images/europa/denilson-espanha-mureta.webp',
+            'alt' => 'Denilson Ferreira sentado numa mureta em rua histórica da Espanha, em 2008',
             'country' => 'Espanha',
-            'city' => 'Barcelona',
-            'author' => 'Bernard Gagnon',
-            'source' => 'https://commons.wikimedia.org/wiki/File:Park_G%C3%BCell_02.jpg',
-            'license' => 'CC BY-SA 3.0',
-            'license_url' => 'https://creativecommons.org/licenses/by-sa/3.0/deed.pt-br',
+            'city' => '2008',
         ],
         [
-            'image' => 'images/europa/lisboa-rua-augusta.webp',
-            'alt' => 'Arco da Rua Augusta, na Praça do Comércio, em Lisboa',
-            'country' => 'Portugal',
-            'city' => 'Lisboa',
-            'author' => 'Diego Delso',
-            'source' => 'https://commons.wikimedia.org/wiki/File:Arco_Triunfal_da_Rua_Augusta,_Plaza_del_Comercio,_Lisboa,_Portugal,_2012-05-12,_DD_02.JPG',
-            'license' => 'CC BY-SA 3.0',
-            'license_url' => 'https://creativecommons.org/licenses/by-sa/3.0/deed.pt-br',
+            'image' => 'images/europa/denilson-espanha-catedral.webp',
+            'alt' => 'Denilson Ferreira diante de uma igreja histórica na Espanha, durante a formação',
+            'country' => 'Espanha',
+            'city' => 'Formação na Catalunha',
         ],
     ],
 
@@ -132,7 +142,7 @@ return [
             'items' => [
                 'Acompanhamento individual em cada sessão',
                 'Correção de postura e execução em tempo real',
-                'Treino, nutrição e bem-estar integrados',
+                'Treino, hábitos saudáveis e bem-estar integrados',
             ],
             'cta' => 'Solicitar orçamento',
             'tipo' => 'presencial',
@@ -356,11 +366,11 @@ return [
             'excerpt' => 'Volume mal distribuído, descanso errado e falta de progressão: veja como destravar seu ganho de massa.',
         ],
         [
-            'title' => 'Como manter a dieta na rotina corrida',
+            'title' => 'Como manter a alimentação saudável na rotina corrida',
             'image' => 'images/blog/dieta-rotina.webp',
-            'category' => 'Nutrição',
+            'category' => 'Hábitos',
             'reading' => 4,
-            'excerpt' => 'Planejamento simples, marmitas inteligentes e escolhas fora de casa que não sabotam seu resultado.',
+            'excerpt' => 'Planejamento simples, marmitas práticas e escolhas fora de casa que não sabotam seu treino. Para um plano alimentar, procure um nutricionista.',
         ],
         [
             'title' => 'Treinar com dor nas costas: o que fazer (e evitar)',

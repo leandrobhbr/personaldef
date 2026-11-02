@@ -7,7 +7,23 @@
       'name' => 'Personal DEF',
       'description' => 'Consultoria de treino online para todo o Brasil e personal trainer presencial em Marília/SP, com formação europeia.',
       'url' => url('/'),
-      'founder' => ['@type' => 'Person', 'name' => config('site.owner_name'), 'jobTitle' => 'Personal Trainer'],
+      'founder' => [
+          '@type' => 'Person',
+          'name' => config('site.owner_name'),
+          'jobTitle' => 'Personal Trainer',
+          'image' => asset(config('site.owner_photo')),
+          'knowsAbout' => ['Musculação', 'Treinamento personalizado', 'Pilates', 'Treino para hipertensos e cardiopatas', 'Hipertrofia', 'Emagrecimento'],
+          // CREF e certificações da formação na Espanha (E-E-A-T: experiência comprovada)
+          'hasCredential' => array_merge(
+              [['@type' => 'EducationalOccupationalCredential', 'credentialCategory' => 'license', 'name' => 'Registro profissional CREF '.config('site.cref'), 'recognizedBy' => ['@type' => 'Organization', 'name' => 'Conselho Regional de Educação Física da 4ª Região (CREF4/SP)']]],
+              collect(config('site.diplomas'))->map(fn ($d) => [
+                  '@type' => 'EducationalOccupationalCredential',
+                  'credentialCategory' => 'certificate',
+                  'name' => $d[0],
+                  'recognizedBy' => ['@type' => 'EducationalOrganization', 'name' => trim(explode('·', $d[1])[0])],
+              ])->values()->all(),
+          ),
+      ],
       'address' => ['@type' => 'PostalAddress', 'addressLocality' => 'Marília', 'addressRegion' => 'SP', 'addressCountry' => 'BR'],
       'areaServed' => 'BR',
   ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
@@ -26,7 +42,7 @@
       <a class="btn btn-o btn-lg" href="#servicos">Ver Planos @include('partials.icons.icon', ['name' => 'seta', 'size' => 18])</a>
     </div>
     <div class="stats">
-      <div><b>7 anos</b><span>de formação na Europa</span></div>
+      <div><b>8 anos</b><span>de formação na Europa</span></div>
       <div><b>Online</b><span>para todo o Brasil</span></div>
       <div><b>Presencial</b><span>em {{ config('site.city') }}</span></div>
     </div>
@@ -53,19 +69,21 @@
     <div style="display: flex; flex-wrap: wrap; gap: 48px; align-items: flex-start">
       <div style="flex: 1 1 380px; min-width: 0; display: flex; flex-direction: column; gap: 16px">
         <span class="tag">Sobre o Personal</span>
-        <h2 class="h2">Conhecimento lapidado nas melhores escolas fitness da Europa.</h2>
+        <h2 class="h2">Formação feita na Europa, aplicada no seu treino.</h2>
       </div>
       <div style="flex: 1 1 480px; min-width: 0; display: flex; flex-direction: column; gap: 18px; font-size: 17px; color: #4A4C52">
-        <p>Durante <strong>7 anos vivendo na Europa</strong>, Denilson Ferreira mergulhou nas melhores escolas e ginásios fitness da <strong>Espanha e de Portugal</strong> para aprimorar seus conhecimentos em atividade física e nutrição — aprendendo, na prática, como os grandes centros europeus transformam corpos com método, ciência e consistência.</p>
-        <p>De volta ao Brasil, ele trouxe esse padrão para cada aluno: um acompanhamento que une treino, alimentação e bem-estar em uma estratégia só sua. Hoje atua como <strong>Personal Trainer registrado no CREF {{ config('site.cref') }}</strong>.</p>
+        <p>Durante <strong>8 anos vivendo na Europa</strong>, Denilson Ferreira estudou e trabalhou em escolas e academias da <strong>Espanha e de Portugal</strong>, onde se formou em musculação, treinamento personalizado e modalidades como pilates e cardiobox — e aprendeu, na prática, que resultado vem de método e constância.</p>
+        <p>De volta ao Brasil, ele trouxe esse padrão para cada aluno: um acompanhamento que une treino, orientação de hábitos saudáveis e bem-estar em uma estratégia só sua. Hoje atua como <strong>Personal Trainer registrado no CREF {{ config('site.cref') }}</strong>.</p>
       </div>
     </div>
     <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(min(420px, 100%), 1fr)); gap: 24px">
       @foreach (config('site.europa') as $foto)
         <figure class="trip">
-          <img src="{{ asset($foto['image']) }}" alt="{{ $foto['alt'] }}" width="1000" height="700" loading="lazy">
+          <img src="{{ asset($foto['image']) }}" alt="{{ $foto['alt'] }}" width="1000" height="625" loading="lazy">
           <figcaption class="trip-label"><i></i><span><strong>{{ $foto['country'] }}</strong> · {{ $foto['city'] }}</span></figcaption>
-          <small class="trip-credit">Foto: <a href="{{ $foto['source'] }}" target="_blank" rel="noopener">{{ $foto['author'] }}</a> · <a href="{{ $foto['license_url'] }}" target="_blank" rel="noopener">{{ $foto['license'] }}</a></small>
+          @if (! empty($foto['source']))
+            <small class="trip-credit">Foto: <a href="{{ $foto['source'] }}" target="_blank" rel="noopener">{{ $foto['author'] }}</a> · <a href="{{ $foto['license_url'] }}" target="_blank" rel="noopener">{{ $foto['license'] }}</a></small>
+          @endif
         </figure>
       @endforeach
     </div>
@@ -76,9 +94,22 @@
           <span class="kicker">{{ $item['tag'] }}</span>
           <h3>{{ $item['title'] }}</h3>
           <p>{{ $item['where'] }}</p>
+          @if (! empty($item['diplomas']))
+            @php
+              $galeria = collect($item['diplomas'])->map(fn ($d) => [
+                  'src' => asset('images/diplomas/'.$d.'.webp').'?v='.@filemtime(public_path('images/diplomas/'.$d.'.webp')),
+                  'alt' => 'Diploma: '.implode(' · ', config('site.diplomas.'.$d)),
+              ])->values();
+            @endphp
+            <button type="button" class="depo-ver card-diplomas" data-galeria="{{ $galeria->toJson(JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) }}" data-galeria-titulo="Diplomas · {{ $item['title'] }}">
+              @include('partials.icons.icon', ['name' => 'fotos', 'size' => 18])
+              Ver {{ count($item['diplomas']) > 1 ? 'diplomas ('.count($item['diplomas']).')' : 'diploma' }}
+            </button>
+          @endif
         </article>
       @endforeach
     </div>
+    <p class="formacao-resumo">{{ count(config('site.diplomas')) }} certificações na Espanha (Barcelona e Sevilha) · CREF {{ config('site.cref') }}</p>
   </div>
 </section>
 
@@ -303,7 +334,6 @@
   </div>
 </section>
 
-@include('partials.galeria-modal')
 @endif
 
 <!-- BLOG -->
@@ -340,5 +370,8 @@
     <a class="btn btn-d" href="{{ $wa('Olá Denilson! Quero agendar minha conversa inicial.') }}" target="_blank" rel="noopener" data-wa-open style="min-height: 60px; padding: 0 32px; font-size: 17px; gap: 12px">@include('partials.icons.icon', ['name' => 'whatsapp', 'size' => 22, 'weight' => 2.2, 'class' => 'ic-acc'])Agendar pelo WhatsApp</a>
   </div>
 </section>
+
+<!-- Slide de fotos: diplomas (Sobre) e fotos dos depoimentos -->
+@include('partials.galeria-modal')
 
 @endsection
