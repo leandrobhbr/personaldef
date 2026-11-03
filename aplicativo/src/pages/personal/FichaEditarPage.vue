@@ -4,7 +4,7 @@
     <q-spinner v-if="!ficha" color="dark" size="30px" />
     <template v-else>
       <div v-if="ficha.aluno" class="bg-def text-white q-pa-md q-mb-md" style="border-radius: 18px">
-        <div class="text-acc" style="font-size: 12px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase">Ficha exclusiva</div>
+        <div class="text-acc" style="font-size: 12px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase">Ficha exclusiva</div>
         <div class="titulo" style="font-size: 18px">{{ ficha.aluno.alu_nome }}</div>
         <div style="opacity: .75; font-size: 13px">Criada em {{ ficha.tre_data_cadastro }}</div>
       </div>

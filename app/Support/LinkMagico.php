@@ -18,7 +18,10 @@ class LinkMagico
     /** @return array{acesso: Acesso, link: string, codigo: string} */
     public static function gerar(?Aluno $aluno, string $perfil = 'ALU'): array
     {
-        $token = Str::random(40);
+        // token curto (6 letras/números, com ao menos uma letra para não confundir com o código)
+        do {
+            $token = Str::random(6);
+        } while (ctype_digit($token) || self::acessoPendente()->where('ace_link_hash', self::hash($token))->exists());
         do {
             $codigo = (string) random_int(100000, 999999);
         } while (self::acessoPendente()->where('ace_codigo_hash', self::hash($codigo))->exists());
@@ -51,6 +54,23 @@ class LinkMagico
             'ace_aparelho' => Str::limit((string) $aparelho, 250, ''),
             'ace_ultimo_uso' => now(),
         ])->save();
+
+        return ['acesso' => $acesso, 'token' => $tokenAparelho];
+    }
+
+    /** Acesso do personal pela senha fixa: já nasce usado, com o token do aparelho. */
+    public static function entrarPersonal(?string $aparelho): array
+    {
+        $tokenAparelho = Str::random(60);
+        $acesso = Acesso::create([
+            'ace_perfil' => 'PER',
+            'ace_link_hash' => self::hash(Str::random(40)),
+            'ace_link_expira' => now(),
+            'ace_link_usado_em' => now(),
+            'ace_token_hash' => self::hash($tokenAparelho),
+            'ace_aparelho' => Str::limit((string) $aparelho, 250, ''),
+            'ace_ultimo_uso' => now(),
+        ]);
 
         return ['acesso' => $acesso, 'token' => $tokenAparelho];
     }

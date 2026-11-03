@@ -9,10 +9,6 @@
       <FichaCartao v-for="f in minhas" :key="f.tre_hashid" :ficha="f" :to="{ name: 'minha-ficha', params: { treHashid: f.tre_hashid } }" />
     </section>
 
-    <section v-if="sessao.personal" class="q-mb-lg">
-      <q-btn unelevated rounded class="bg-def text-white full-width" icon="groups" label="Área do personal: alunos e fichas" :to="{ name: 'personal' }" no-caps />
-    </section>
-
     <!-- área livre: fichas genéricas do Denilson -->
     <section>
       <span class="tag">Fichas gratuitas</span>

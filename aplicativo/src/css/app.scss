@@ -1,12 +1,14 @@
 // Visual do Personal DEF: preto, verde-limão e Montserrat/Inter (igual ao site)
 :root { --def-ink: #0E0F11; --def-acc: #E4FF3A; --def-bg: #FAFAF7; --def-line: #E4E4DE; --def-muted: #55585E; }
 body { font-family: Inter, system-ui, sans-serif; background: var(--def-bg); color: #2B2D31; }
-h1, h2, h3, .titulo { font-family: Montserrat, system-ui, sans-serif; font-weight: 800; letter-spacing: -0.5px; margin: 0; line-height: 1.2; }
+h1, h2, h3, .titulo { font-family: Montserrat, system-ui, sans-serif; font-weight: 600; letter-spacing: -0.3px; margin: 0; line-height: 1.2; }
 .bg-def { background: var(--def-ink) !important; }
+.topo { background: #F1F1EC !important; border-bottom: 1px solid var(--def-line); } /* mesmo cinza do site */
 .text-acc { color: var(--def-acc) !important; }
 .bg-acc { background: var(--def-acc) !important; color: var(--def-ink) !important; }
-.tag { display: inline-block; padding: 4px 10px; background: var(--def-acc); color: var(--def-ink); font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; border-radius: 6px; }
+.tag { display: inline-block; padding: 4px 10px; background: var(--def-acc); color: var(--def-ink); font-size: 11px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; border-radius: 6px; }
 .cartao { background: #fff; border: 1px solid var(--def-line); border-radius: 18px; }
 .texto-suave { color: var(--def-muted); }
 .pagina { max-width: 760px; margin: 0 auto; padding: 16px 16px 24px; }
 .aviso-personalizada { border: 1.5px dashed var(--def-ink); border-radius: 14px; padding: 12px 14px; }
+.icone-ficha { background: #F1F1EC; color: var(--def-ink); border: 1px solid var(--def-line); } /* cinza do site */

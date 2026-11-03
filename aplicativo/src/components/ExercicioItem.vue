@@ -60,5 +60,5 @@ function info (o) {
 <style scoped>
 .midia { flex: none; width: 92px; height: 92px; border-radius: 12px; overflow: hidden; background: #F1F1EC; cursor: zoom-in; }
 .midia img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.ordem { flex: none; width: 24px; height: 24px; margin-right: 8px; border-radius: 50%; background: var(--def-acc); color: var(--def-ink); font-weight: 800; font-size: 12px; display: flex; align-items: center; justify-content: center; }
+.ordem { flex: none; width: 24px; height: 24px; margin-right: 8px; border-radius: 50%; background: var(--def-acc); color: var(--def-ink); font-weight: 600; font-size: 12px; display: flex; align-items: center; justify-content: center; }
 </style>

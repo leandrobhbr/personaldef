@@ -1,7 +1,7 @@
 <template>
   <q-item clickable :to="to" class="cartao q-pa-md q-mb-sm">
     <q-item-section avatar>
-      <q-avatar class="bg-def text-acc" rounded icon="fitness_center" />
+      <q-avatar class="icone-ficha" rounded icon="fitness_center" />
     </q-item-section>
     <q-item-section>
       <q-item-label class="titulo" style="font-size: 16px">{{ ficha.tre_titulo }}</q-item-label>

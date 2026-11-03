@@ -5,6 +5,13 @@
       <span>Liberando suas fichas neste aparelho…</span>
     </div>
 
+    <div v-else-if="modoPersonal" class="cartao q-pa-lg">
+      <span class="tag">Área do personal</span>
+      <h1 class="q-mt-sm q-mb-sm" style="font-size: 22px">Entrar como personal</h1>
+      <q-input v-model="senha" outlined type="password" label="Senha" autofocus class="q-mb-md" @keyup.enter="enviarSenha" :error="!!erro" :error-message="erro" />
+      <q-btn unelevated rounded class="bg-def text-white full-width" label="Entrar" no-caps :disable="!senha" @click="enviarSenha" />
+    </div>
+
     <div v-else class="cartao q-pa-lg">
       <span class="tag">Acesso do aluno</span>
       <h1 class="q-mt-sm q-mb-sm" style="font-size: 22px">Digite o código do Denilson</h1>
@@ -16,7 +23,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useQuasar } from 'quasar'
 import { api } from 'boot/api'
@@ -28,12 +35,17 @@ const $q = useQuasar()
 const codigo = ref('')
 const erro = ref('')
 const processando = ref(false)
+const senha = ref('')
+const modoPersonal = computed(() => route.query.personal !== undefined)
 
-async function enviar (token) {
+const enviarSenha = () => liberar('entrar-personal', { senha: senha.value })
+const enviar = (token) => liberar('entrar', { token })
+
+async function liberar (rota, dados) {
   processando.value = true
   erro.value = ''
   try {
-    const { data } = await api.post('entrar', { token })
+    const { data } = await api.post(rota, dados)
     sessao.entrar(data)
     $q.notify({ message: data.perfil === 'personal' ? 'Bem-vindo, Denilson!' : 'Pronto! Suas fichas estão liberadas neste aparelho.', color: 'positive', icon: 'check' })
     router.replace({ name: data.perfil === 'personal' ? 'personal' : 'inicio' })

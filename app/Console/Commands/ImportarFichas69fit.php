@@ -64,7 +64,7 @@ class ImportarFichas69fit extends Command
             }
             $this->line('tb_exercicio: '.count($mapa['exe'] ?? []));
 
-            // fichas do Denilson viram genéricas (privadas: ele escolhe quais deixar públicas no app)
+            // fichas do Denilson viram genéricas públicas (uso livre; ele pode esconder pelo app)
             $qtd = $this->importarTreinos($antigo, $personal->id, null, $mapa);
             $this->line("fichas genéricas: {$qtd}");
 
@@ -101,13 +101,19 @@ class ImportarFichas69fit extends Command
         return self::SUCCESS;
     }
 
+    /** Textos do 69fit passam a citar o Personal DEF. */
+    private static function trocarMarca(?string $texto): ?string
+    {
+        return $texto === null ? null : preg_replace('/69fit/i', 'personaldef', str_ireplace('69fit.com', 'personaldef.com.br', $texto));
+    }
+
     private function importarTreinos($antigo, int $usuId, ?int $alunoId, array $mapa): int
     {
         $qtd = 0;
         foreach ($antigo->table('tb_treino')->where('usu_id', $usuId)->where('tre_situacao', '<>', 'IN')->get() as $t) {
             $treino = Treino::firstOrCreate(['tre_titulo' => $t->tre_titulo, 'alu_id' => $alunoId], [
-                'tre_obs_professor' => $t->tre_obs_professor, 'tre_data_cadastro' => $t->tre_data_cadastro,
-                'tre_ordem' => $t->tre_ordem, 'tre_situacao' => 'AT', 'tre_publico' => false,
+                'tre_obs_professor' => self::trocarMarca($t->tre_obs_professor), 'tre_data_cadastro' => $t->tre_data_cadastro,
+                'tre_ordem' => $t->tre_ordem, 'tre_situacao' => 'AT', 'tre_publico' => $alunoId === null,
             ]);
             if (! $treino->wasRecentlyCreated) {
                 continue;

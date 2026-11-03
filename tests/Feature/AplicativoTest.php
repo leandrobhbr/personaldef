@@ -127,6 +127,16 @@ class AplicativoTest extends TestCase
         $this->getJson('/api/app/minhas-fichas', $auth2)->assertUnauthorized();
     }
 
+    public function test_personal_entra_com_senha_fixa(): void
+    {
+        config(['aplicativo.senha_personal' => 'senha-teste']);
+
+        $this->postJson('/api/app/entrar-personal', ['senha' => 'errada'])->assertStatus(422);
+        $token = $this->postJson('/api/app/entrar-personal', ['senha' => 'senha-teste'])
+            ->assertOk()->assertJsonPath('perfil', 'personal')->json('token');
+        $this->getJson('/api/app/personal/alunos', ['Authorization' => "Bearer {$token}"])->assertOk();
+    }
+
     public function test_area_do_personal_e_exclusiva_do_denilson(): void
     {
         $aluno = ['Authorization' => 'Bearer '.$this->tokenDe($this->aluno())];

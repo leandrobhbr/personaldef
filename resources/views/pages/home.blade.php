@@ -34,7 +34,7 @@
 <!-- HERO -->
 <section id="home" class="wrap hero">
   <div style="flex: 1 1 520px; min-width: 0; display: flex; flex-direction: column; gap: 28px">
-    <span class="pill"><i></i><span>20+ anos de carreira · Formação na Europa e no Brasil</span></span>
+    <span class="pill"><i></i><span>30+ anos de carreira · Formação na Europa e no Brasil</span></span>
     <h1>Transforme seu corpo e sua saúde com acompanhamento de <span class="mark">padrão europeu</span>.</h1>
     <p style="font-size: 19px; color: #4A4C52; max-width: 580px">Dois caminhos, o mesmo método: <strong>Consultoria de Treino Online</strong> com fichas 100% individualizadas para todo o Brasil, ou <strong>Personal Trainer Presencial</strong> exclusivo em {{ config('site.city') }}.</p>
     <div style="display: flex; flex-wrap: wrap; gap: 14px">

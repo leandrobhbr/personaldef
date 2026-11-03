@@ -21,7 +21,7 @@ export async function ativarPush () {
   if (!suportado()) throw new Error('Este aparelho não recebe avisos (no iPhone, instale o app na tela inicial).')
   const { data } = await api.get('push/chave')
   if (!data.chave) throw new Error('Avisos ainda não configurados no servidor.')
-  if ((await Notification.requestPermission()) !== 'granted') throw new Error('Permissão de notificação negada.')
+  if ((await Notification.requestPermission()) !== 'granted') throw new Error('Permissão de notificação negada. Função exclusiva para celular.')
   const registro = await navigator.serviceWorker.ready
   const assinatura = (await registro.pushManager.getSubscription()) ||
     (await registro.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: chaveParaBytes(data.chave) }))

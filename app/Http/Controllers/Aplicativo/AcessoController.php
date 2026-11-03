@@ -25,6 +25,20 @@ class AcessoController extends Controller
         return response()->json(['token' => $resultado['token']] + $this->perfil($resultado['acesso']));
     }
 
+    public function entrarPersonal(Request $request): JsonResponse
+    {
+        $dados = $request->validate(['senha' => ['required', 'string', 'max:100']]);
+        $senha = (string) config('aplicativo.senha_personal');
+
+        if ($senha === '' || ! hash_equals($senha, $dados['senha'])) {
+            return response()->json(['message' => 'Senha incorreta.'], 422);
+        }
+
+        $resultado = LinkMagico::entrarPersonal($request->userAgent());
+
+        return response()->json(['token' => $resultado['token']] + $this->perfil($resultado['acesso']));
+    }
+
     public function eu(Request $request): JsonResponse
     {
         return response()->json($this->perfil($request->attributes->get('acesso')));

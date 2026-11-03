@@ -17,6 +17,8 @@ Route::prefix('app')->group(function () {
 
     // Link mágico / código de 6 dígitos -> token do aparelho
     Route::post('entrar', [AcessoController::class, 'entrar'])->middleware('throttle:10,1');
+    // Senha fixa do personal -> token do aparelho
+    Route::post('entrar-personal', [AcessoController::class, 'entrarPersonal'])->middleware('throttle:5,1');
 
     // Avisos de nova versão (Web Push): qualquer aparelho, com ou sem link mágico
     Route::get('push/chave', [PushController::class, 'chave']);

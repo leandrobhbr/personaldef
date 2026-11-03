@@ -7,7 +7,8 @@ export default route(() => {
   const router = createRouter({ history: createWebHashHistory(), routes, scrollBehavior: () => ({ left: 0, top: 0 }) })
 
   router.beforeEach((to) => {
-    if (to.meta.personal && !sessao.personal) return { name: 'inicio' }
+    // área do personal: quem não entrou cai na tela de senha
+    if (to.meta.personal && !sessao.personal) return { name: 'entrar', query: { personal: 1 } }
     if (to.meta.aluno && !sessao.liberado) return { name: 'inicio' }
   })
 

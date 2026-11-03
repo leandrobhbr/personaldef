@@ -1,8 +1,8 @@
 <template>
   <q-layout view="hHh lpR fFf">
-    <q-header class="bg-def">
+    <q-header class="topo text-dark">
       <q-toolbar class="q-px-md">
-        <router-link :to="{ name: 'inicio' }" class="row items-center no-wrap text-white" style="text-decoration: none; gap: 10px">
+        <router-link :to="{ name: 'inicio' }" class="row items-center no-wrap text-dark" style="text-decoration: none; gap: 10px">
           <img src="icons/icon-128.png" alt="" width="34" height="34" style="border-radius: 8px">
           <div class="column" style="line-height: 1.1">
             <span class="titulo" style="font-size: 16px">Personal DEF</span>
@@ -10,7 +10,6 @@
           </div>
         </router-link>
         <q-space />
-        <q-btn v-if="sessao.personal" flat round icon="groups" :to="{ name: 'personal' }" aria-label="Área do personal" />
         <q-btn flat round icon="more_vert" aria-label="Menu">
           <q-menu auto-close>
             <q-list style="min-width: 230px">
