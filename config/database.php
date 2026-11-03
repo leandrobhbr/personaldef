@@ -64,6 +64,20 @@ return [
             ]) : [],
         ],
 
+        // Banco antigo do 69fit, só para o comando app:importar-69fit
+        'mysql_69fit' => [
+            'driver' => 'mysql',
+            'host' => env('DB_69FIT_HOST', '127.0.0.1'),
+            'port' => env('DB_69FIT_PORT', '3306'),
+            'database' => env('DB_69FIT_DATABASE', '69fit'),
+            'username' => env('DB_69FIT_USERNAME', 'root'),
+            'password' => env('DB_69FIT_PASSWORD', ''),
+            'charset' => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
+            'prefix' => '',
+            'strict' => false,
+        ],
+
         'mariadb' => [
             'driver' => 'mariadb',
             'url' => env('DB_URL'),

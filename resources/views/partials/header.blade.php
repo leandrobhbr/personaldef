@@ -24,6 +24,7 @@
         <a href="{{ $link['href'] }}">{{ $link['label'] }}</a>
       @endforeach
     </nav>
+    <a class="btn btn-o app-top" href="{{ url('/app/') }}" aria-label="Abrir o aplicativo de fichas">@include('partials.icons.icon', ['name' => 'celular', 'size' => 18])<span>Aplicativo</span></a>
     <a class="btn btn-d cta-desk" href="{{ $ctaUrl }}" target="_blank" rel="noopener" data-wa-open style="min-height: 44px; padding: 0 20px; font-weight: 700">@include('partials.icons.icon', ['name' => 'whatsapp', 'size' => 18, 'class' => 'ic-acc'])Falar no WhatsApp</a>
     <button type="button" class="burger" data-menu-toggle aria-label="Abrir menu" aria-expanded="false" aria-controls="menu-mobile">
       <span data-icon="open">@include('partials.icons.icon', ['name' => 'menu', 'size' => 22])</span>
@@ -34,6 +35,7 @@
     @foreach ($links as $link)
       <a class="lnk" href="{{ $link['href'] }}">{{ $link['label'] }}</a>
     @endforeach
-    <a class="btn btn-d" href="{{ $ctaUrl }}" target="_blank" rel="noopener" data-wa-open style="margin-top: 12px; min-height: 52px">Falar no WhatsApp</a>
+    <a class="btn btn-o" href="{{ url('/app/') }}" style="margin-top: 12px; min-height: 52px">@include('partials.icons.icon', ['name' => 'celular', 'size' => 18])Aplicativo de fichas</a>
+    <a class="btn btn-d" href="{{ $ctaUrl }}" target="_blank" rel="noopener" data-wa-open style="margin-top: 8px; min-height: 52px">Falar no WhatsApp</a>
   </nav>
 </header>

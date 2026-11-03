@@ -25,3 +25,8 @@ _ide_helper.php
 Homestead.json
 Homestead.yaml
 Thumbs.db
+
+# Aplicativo de fichas (o build em public/app vai para o git; o servidor não precisa de Node)
+/aplicativo/node_modules
+/aplicativo/.quasar
+/aplicativo/dist

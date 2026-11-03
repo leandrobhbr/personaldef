@@ -41,6 +41,7 @@
       <a class="btn btn-d btn-lg" href="{{ $wa('Olá Denilson! Quero iniciar minha transformação.') }}" target="_blank" rel="noopener" data-wa-open>@include('partials.icons.icon', ['name' => 'whatsapp', 'size' => 20, 'weight' => 2.2, 'class' => 'ic-acc'])Iniciar Minha Transformação</a>
       <a class="btn btn-o btn-lg" href="#servicos">Ver Planos @include('partials.icons.icon', ['name' => 'seta', 'size' => 18])</a>
     </div>
+    <a class="app-convite" href="{{ url('/app/') }}">@include('partials.icons.icon', ['name' => 'celular', 'size' => 20])<span><strong>Fichas no aplicativo Personal DEF.</strong> Teste grátis agora, sem cadastro.</span>@include('partials.icons.icon', ['name' => 'seta', 'size' => 18])</a>
     <div class="stats">
       <div><b>Desde 1994</b><span>atuando como personal trainer</span></div>
       <div><b>Online</b><span>para todo o Brasil</span></div>
@@ -214,6 +215,14 @@
           </div>
         </article>
       @endforeach
+    </div>
+    <div class="app-faixa">
+      <span class="ibox ibox-acc">@include('partials.icons.icon', ['name' => 'celular', 'size' => 26])</span>
+      <div style="flex: 1 1 320px; min-width: 0">
+        <h3>Teste o aplicativo agora, sem cadastro</h3>
+        <p>As fichas gratuitas do Denilson estão liberadas no app: exercícios com imagem, séries, descanso e explicação. Quando quiser a sua ficha personalizada, ela chega no mesmo aplicativo.</p>
+      </div>
+      <a class="btn btn-d btn-lg" href="{{ url('/app/') }}">@include('partials.icons.icon', ['name' => 'celular', 'size' => 20, 'class' => 'ic-acc'])Abrir o aplicativo</a>
     </div>
   </div>
 </section>

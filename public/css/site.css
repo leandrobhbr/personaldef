@@ -307,3 +307,18 @@ body.wam-open{overflow:hidden}
 .reveal [data-reveal].is-in{opacity:1;transform:none}
 .reveal .cel-wrap.is-in .cel{animation:flutua 6s ease-in-out 1s infinite}
 @keyframes flutua{0%,100%{transform:rotate(-2deg) translateY(0)}50%{transform:rotate(-1deg) translateY(-10px)}}
+
+/* aplicativo de fichas: botão do topo, convite do hero e faixa de teste */
+.app-top{min-height:44px;padding:0 18px;font-weight:700;margin-left:auto}
+.app-convite svg{flex:none}
+.hdr a[aria-label="Personal DEF — início"] span{white-space:nowrap}
+.app-convite{align-self:flex-start;display:inline-flex;align-items:center;gap:10px;padding:10px 16px;border:1.5px dashed var(--ink);border-radius:14px;font-size:15px;color:var(--fg);text-decoration:none;transition:background .15s}
+.app-convite:hover{background:#F3F3EE;color:var(--fg)}
+.app-faixa{display:flex;flex-wrap:wrap;align-items:center;gap:20px 24px;padding:28px;border-radius:22px;background:var(--ink);color:#fff}
+.app-faixa h3{color:#fff;font-size:22px;margin-bottom:6px}
+.app-faixa p{color:rgba(255,255,255,.78);font-size:15px}
+.app-faixa .btn-d{background:var(--accent);color:var(--ink)}.app-faixa .btn-d:hover{background:#EEFF7A;color:var(--ink)}
+.app-faixa .btn-d svg.ic-acc{color:var(--ink)}
+@media (max-width:1180px){.app-top{padding:0 14px}}
+@media (max-width:1320px) and (min-width:1181px){.nav-desk{gap:20px}}
+@media (max-width:420px){.app-top span{display:none}.app-top{width:44px;padding:0}}

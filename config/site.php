@@ -124,10 +124,11 @@ return [
             'icon' => 'celular',
             'badge' => 'Todo o Brasil',
             'title' => 'Consultoria de Treino Online',
-            'text' => 'Fichas de treino montadas do zero para você, entregues em formato digital e explicativo. Treine onde estiver, no seu horário, com a segurança de saber exatamente o que fazer.',
+            'text' => 'Fichas de treino montadas do zero para você, entregues no aplicativo Personal DEF. Treine onde estiver, no seu horário, com a segurança de saber exatamente o que fazer.',
             'items' => [
                 'Treino 100% individualizado',
                 'Séries, repetições, descanso e execução passo a passo',
+                'Ficha no aplicativo, com imagem e explicação de cada exercício',
                 'Praticidade: academia, condomínio ou em casa',
             ],
             'cta' => 'Solicitar orçamento',
@@ -143,6 +144,7 @@ return [
                 'Acompanhamento individual em cada sessão',
                 'Correção de postura e execução em tempo real',
                 'Treino, hábitos saudáveis e bem-estar integrados',
+                'Sua ficha também no aplicativo, para os dias sem sessão',
             ],
             'cta' => 'Solicitar orçamento',
             'tipo' => 'presencial',
@@ -160,7 +162,7 @@ return [
         ['Chame no WhatsApp', 'Nosso assistente agenda automaticamente sua conversa inicial, no horário que for melhor para você.'],
         ['Avaliação completa', 'Mapeamos sua rotina, histórico, limitações, lesões, equipamentos disponíveis e o objetivo que você quer alcançar.'],
         ['Ficha montada do zero', 'Denilson desenha seu plano com a metodologia europeia — nada de modelo pronto ou ficha genérica.'],
-        ['Receba e treine', 'Sua ficha chega em formato digital e explicativo, pronta para usar no celular durante o treino.'],
+        ['Receba no aplicativo', 'Sua ficha chega no aplicativo Personal DEF: toque no link que o Denilson manda no WhatsApp e treine com o celular na mão.'],
     ],
 
     'ficha' => [

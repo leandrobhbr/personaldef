@@ -97,6 +97,9 @@ return [
 
     'cipher' => 'AES-256-CBC',
 
+    // Salt dos hashids das APIs do aplicativo (6 caracteres)
+    'hashid_salt' => env('APP_HASHID_SALT', env('APP_KEY')),
+
     'key' => env('APP_KEY'),
 
     'previous_keys' => [

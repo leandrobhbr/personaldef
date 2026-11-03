@@ -7,7 +7,7 @@ ARG GID=1000
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
         git unzip libzip-dev libicu-dev \
-    && docker-php-ext-install zip intl pdo_mysql \
+    && docker-php-ext-install zip intl pdo_mysql bcmath \
     && a2enmod rewrite headers \
     && rm -rf /var/lib/apt/lists/*
 

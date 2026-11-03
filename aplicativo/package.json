@@ -1,0 +1,33 @@
+{
+  "name": "personaldef-app",
+  "version": "1.0.0",
+  "description": "Fichas de treino do Personal DEF",
+  "productName": "Personal DEF",
+  "author": "bhnaweb.com.br",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "quasar dev -m pwa",
+    "build": "quasar build -m pwa"
+  },
+  "dependencies": {
+    "@quasar/extras": "^1.17.0",
+    "axios": "^1.7.0",
+    "quasar": "^2.18.0",
+    "vue": "^3.5.0",
+    "vue-router": "^4.4.0"
+  },
+  "devDependencies": {
+    "@quasar/app-vite": "^2.4.0",
+    "workbox-build": "^7.3.0",
+    "workbox-core": "^7.3.0",
+    "workbox-precaching": "^7.3.0",
+    "workbox-routing": "^7.3.0",
+    "workbox-strategies": "^7.3.0",
+    "workbox-expiration": "^7.3.0",
+    "register-service-worker": "^1.7.2"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
