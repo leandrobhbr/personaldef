@@ -16,7 +16,7 @@
       <span class="logo">DEF</span>
       <span style="display: flex; flex-direction: column; line-height: 1.1">
         <span style="font-family: Montserrat, sans-serif; font-weight: 800; font-size: 18px">Personal DEF</span>
-        <span style="font-size: 12px; color: #55585E">{{ config('site.owner_name') }} · Personal Trainer</span>
+        <span style="font-size: 12px; color: #55585E">{{ config('site.owner_name') }}</span>
       </span>
     </a>
     <nav class="nav-desk" aria-label="Principal">

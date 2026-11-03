@@ -1,5 +1,7 @@
 <template>
   <q-page class="pagina">
+    <InstalarApp />
+
     <!-- fichas exclusivas do aluno (liberadas pelo link mágico) -->
     <section v-if="sessao.liberado && !sessao.personal" class="q-mb-lg">
       <span class="tag">Suas fichas</span>
@@ -32,6 +34,7 @@ import { computed, onMounted, ref } from 'vue'
 import { api } from 'boot/api'
 import { sessao } from 'src/sessao'
 import FichaCartao from 'components/FichaCartao.vue'
+import InstalarApp from 'components/InstalarApp.vue'
 
 const publicas = ref([])
 const minhas = ref([])
