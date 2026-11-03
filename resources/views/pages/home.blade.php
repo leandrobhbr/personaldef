@@ -42,7 +42,7 @@
       <a class="btn btn-o btn-lg" href="#servicos">Ver Planos @include('partials.icons.icon', ['name' => 'seta', 'size' => 18])</a>
     </div>
     <div class="stats">
-      <div><b>8 anos</b><span>de formação na Europa</span></div>
+      <div><b>Desde 1994</b><span>atuando como personal trainer</span></div>
       <div><b>Online</b><span>para todo o Brasil</span></div>
       <div><b>Presencial</b><span>em {{ config('site.city') }}</span></div>
     </div>
@@ -72,7 +72,7 @@
         <h2 class="h2">Formação feita na Europa, aplicada no seu treino.</h2>
       </div>
       <div style="flex: 1 1 480px; min-width: 0; display: flex; flex-direction: column; gap: 18px; font-size: 17px; color: #4A4C52">
-        <p>Durante <strong>8 anos vivendo na Europa</strong>, Denilson Ferreira estudou e trabalhou em escolas e academias da <strong>Espanha e de Portugal</strong>, onde se formou em musculação, treinamento personalizado e modalidades como pilates e cardiobox — e aprendeu, na prática, que resultado vem de método e constância.</p>
+        <p>Denilson Ferreira estudou e trabalhou em escolas e academias da <strong>Espanha e de Portugal</strong>, onde se formou em musculação, treinamento personalizado e modalidades como pilates e cardiobox — e aprendeu, na prática, que resultado vem de método e constância.</p>
         <p>De volta ao Brasil, ele trouxe esse padrão para cada aluno: um acompanhamento que une treino, orientação de hábitos saudáveis e bem-estar em uma estratégia só sua. Hoje atua como <strong>Personal Trainer registrado no CREF {{ config('site.cref') }}</strong>.</p>
       </div>
     </div>
