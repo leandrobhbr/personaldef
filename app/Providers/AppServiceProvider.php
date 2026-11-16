@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Support\Ia\ClaudeSugeridorFichas;
+use App\Support\Ia\SugeridorFichas;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
@@ -13,7 +15,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        // "Fichas com IA": nos testes o Claude é trocado por um sugeridor falso
+        $this->app->bind(SugeridorFichas::class, ClaudeSugeridorFichas::class);
     }
 
     /**

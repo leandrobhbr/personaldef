@@ -28,6 +28,17 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    // API da Anthropic (Claude) — "Fichas com IA" no app do personal (mesma conta do bhnaweb/espacotae). Preços em US$
+    // por milhão de tokens, só para estimar o custo de cada sugestão no log (o valor cobrado é o da fatura da Anthropic)
+    'anthropic' => [
+        'key' => env('ANTHROPIC_API_KEY'),
+        'model' => env('ANTHROPIC_MODEL', 'claude-haiku-5-5'),
+        'effort' => env('ANTHROPIC_EFFORT', 'medium'),
+        'timeout' => (int) env('ANTHROPIC_TIMEOUT', 120),
+        'preco_entrada_mtok' => (float) env('ANTHROPIC_PRECO_ENTRADA_MTOK', 0.10),
+        'preco_saida_mtok' => (float) env('ANTHROPIC_PRECO_SAIDA_MTOK', 0.50),
+    ],
+
     'slack' => [
         'notifications' => [
             'bot_user_oauth_token' => env('SLACK_BOT_USER_OAUTH_TOKEN'),

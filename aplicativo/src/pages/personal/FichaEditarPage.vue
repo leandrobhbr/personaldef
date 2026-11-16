@@ -15,6 +15,7 @@
         <q-toggle v-if="!ficha.aluno" v-model="dados.tre_publico" color="dark" label="Pública (aparece na área livre do app)" @update:model-value="salvarFicha" />
         <div class="row" style="gap: 8px">
           <q-btn flat dense no-caps icon="visibility" label="Ver como o aluno" @click="verComoAluno = true" />
+          <q-btn flat dense no-caps icon="picture_as_pdf" label="PDF" :loading="gerandoPdf" :disable="!ficha.exercicios.length" @click="pdf" />
           <q-space />
           <q-btn flat dense no-caps color="negative" icon="delete" label="Excluir ficha" @click="excluirFicha" />
         </div>
@@ -83,6 +84,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { useQuasar } from 'quasar'
 import { api } from 'boot/api'
 import ExercicioItem from 'components/ExercicioItem.vue'
+import { baixarPdf } from 'src/pdf'
 
 const route = useRoute()
 const router = useRouter()
@@ -95,6 +97,12 @@ const verComoAluno = ref(false)
 const item = reactive({})
 const filtro = ref('')
 const hashid = computed(() => route.params.treHashid)
+const gerandoPdf = ref(false)
+
+async function pdf () {
+  gerandoPdf.value = true
+  try { await baixarPdf(`personal/fichas/${hashid.value}/pdf`) } catch (e) { $q.notify({ message: 'Não foi possível gerar o PDF.', color: 'negative' }) } finally { gerandoPdf.value = false }
+}
 
 const opcoes = (lista) => lista.map((o) => ({ label: o.nome, value: o.hashid }))
 const opMusculos = computed(() => opcoes(catalogo.value.musculos))

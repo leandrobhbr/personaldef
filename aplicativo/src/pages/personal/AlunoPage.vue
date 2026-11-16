@@ -33,8 +33,9 @@
     </div>
 
     <!-- fichas -->
-    <div class="row items-center q-mb-sm">
-      <h2 class="col" style="font-size: 18px">Fichas</h2>
+    <div class="row items-center q-mb-sm" style="gap: 2px">
+      <h2 class="col-12 col-sm" style="font-size: 18px">Fichas</h2>
+      <q-btn flat no-caps icon="auto_awesome" label="Fichas com IA" @click="iaAberta = true" />
       <q-btn v-if="aluHashid" flat no-caps icon="content_copy" label="Copiar genérica" @click="copiarGenerica" />
       <q-btn unelevated rounded no-caps class="bg-def text-white" icon="add" label="Nova" @click="novaFicha" />
     </div>
@@ -46,6 +47,9 @@
       <q-item-section side v-if="!aluHashid"><q-badge :class="f.tre_publico ? 'bg-acc' : ''" :color="f.tre_publico ? undefined : 'grey-5'" :label="f.tre_publico ? 'pública' : 'privada'" /></q-item-section>
     </q-item>
     <div v-if="!fichas.length" class="texto-suave">Nenhuma ficha ainda.</div>
+    <q-btn v-if="aluHashid && fichas.length" flat no-caps icon="picture_as_pdf" label="Baixar PDF com todas as fichas" class="q-mt-xs" :loading="gerandoPdf" @click="pdf" />
+
+    <FichasIaDialog v-model="iaAberta" :alu-hashid="aluHashid" :aluno-nome="aluno ? aluno.alu_nome : 'fichas genéricas'" @criadas="carregar" />
 
     <!-- link de acesso: um botão de WhatsApp por telefone -->
     <q-dialog v-model="mostrarLink">
@@ -68,6 +72,8 @@ import { useRoute, useRouter } from 'vue-router'
 import { copyToClipboard, useQuasar } from 'quasar'
 import { api } from 'boot/api'
 import AlunoForm from 'components/AlunoForm.vue'
+import FichasIaDialog from 'components/FichasIaDialog.vue'
+import { baixarPdf } from 'src/pdf'
 
 const route = useRoute()
 const router = useRouter()
@@ -80,6 +86,13 @@ const editar = ref(false)
 const gerando = ref(false)
 const mostrarLink = ref(false)
 const link = ref({ whatsapp: [] })
+const iaAberta = ref(false)
+const gerandoPdf = ref(false)
+
+async function pdf () {
+  gerandoPdf.value = true
+  try { await baixarPdf(`personal/alunos/${aluHashid.value}/pdf`) } catch (e) { $q.notify({ message: 'Não foi possível gerar o PDF.', color: 'negative' }) } finally { gerandoPdf.value = false }
+}
 
 async function carregar () {
   if (aluHashid.value) aluno.value = (await api.get(`personal/alunos/${aluHashid.value}`)).data

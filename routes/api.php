@@ -5,6 +5,8 @@ use App\Http\Controllers\Aplicativo\AlunoFichaController;
 use App\Http\Controllers\Aplicativo\Personal\AlunoController;
 use App\Http\Controllers\Aplicativo\Personal\CatalogoController;
 use App\Http\Controllers\Aplicativo\Personal\FichaController;
+use App\Http\Controllers\Aplicativo\Personal\FichaIaController;
+use App\Http\Controllers\Aplicativo\Personal\FichaPdfController;
 use App\Http\Controllers\Aplicativo\PublicoController;
 use App\Http\Controllers\Aplicativo\PushController;
 use Illuminate\Support\Facades\Route;
@@ -54,6 +56,14 @@ Route::prefix('app')->group(function () {
         Route::post('fichas/{treHashid}/exercicios/ordenar', [FichaController::class, 'ordenarExercicios']);
         Route::put('exercicios-ficha/{texHashid}', [FichaController::class, 'atualizarExercicio']);
         Route::delete('exercicios-ficha/{texHashid}', [FichaController::class, 'removerExercicio']);
+
+        // Fichas com IA: sugere (nada é gravado) e cria uma ficha conferida por vez
+        Route::post('ia/sugerir', [FichaIaController::class, 'sugerir'])->middleware('throttle:10,1');
+        Route::post('ia/confirmar', [FichaIaController::class, 'confirmar']);
+
+        // PDF de uma ficha ou de todas as fichas do aluno
+        Route::get('fichas/{treHashid}/pdf', [FichaPdfController::class, 'ficha']);
+        Route::get('alunos/{aluHashid}/pdf', [FichaPdfController::class, 'aluno']);
 
         Route::get('catalogo', [CatalogoController::class, 'index']);
         Route::post('catalogo/exercicios', [CatalogoController::class, 'salvarExercicio']);
