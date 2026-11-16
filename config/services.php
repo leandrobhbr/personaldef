@@ -33,7 +33,7 @@ return [
     'anthropic' => [
         'key' => env('ANTHROPIC_API_KEY'),
         'model' => env('ANTHROPIC_MODEL', 'claude-haiku-5-5'),
-        'effort' => env('ANTHROPIC_EFFORT', 'medium'),
+        'effort' => env('ANTHROPIC_EFFORT', 'low'),
         'timeout' => (int) env('ANTHROPIC_TIMEOUT', 120),
         'preco_entrada_mtok' => (float) env('ANTHROPIC_PRECO_ENTRADA_MTOK', 0.10),
         'preco_saida_mtok' => (float) env('ANTHROPIC_PRECO_SAIDA_MTOK', 0.50),
