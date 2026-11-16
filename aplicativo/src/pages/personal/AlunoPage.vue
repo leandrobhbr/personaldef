@@ -47,7 +47,7 @@
       <q-item-section side v-if="!aluHashid"><q-badge :class="f.tre_publico ? 'bg-acc' : ''" :color="f.tre_publico ? undefined : 'grey-5'" :label="f.tre_publico ? 'pública' : 'privada'" /></q-item-section>
     </q-item>
     <div v-if="!fichas.length" class="texto-suave">Nenhuma ficha ainda.</div>
-    <q-btn v-if="aluHashid && fichas.length" flat no-caps icon="picture_as_pdf" label="Baixar PDF com todas as fichas" class="q-mt-xs" :loading="gerandoPdf" @click="pdf" />
+    <BotaoPdf v-if="aluHashid && fichas.length" :url="`personal/alunos/${aluHashid}/pdf`" label="Baixar PDF com todas as fichas" class="q-mt-xs" />
 
     <FichasIaDialog v-model="iaAberta" :alu-hashid="aluHashid" :aluno-nome="aluno ? aluno.alu_nome : 'fichas genéricas'" @criadas="carregar" />
 
@@ -73,7 +73,7 @@ import { copyToClipboard, useQuasar } from 'quasar'
 import { api } from 'boot/api'
 import AlunoForm from 'components/AlunoForm.vue'
 import FichasIaDialog from 'components/FichasIaDialog.vue'
-import { baixarPdf } from 'src/pdf'
+import BotaoPdf from 'components/BotaoPdf.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -87,12 +87,6 @@ const gerando = ref(false)
 const mostrarLink = ref(false)
 const link = ref({ whatsapp: [] })
 const iaAberta = ref(false)
-const gerandoPdf = ref(false)
-
-async function pdf () {
-  gerandoPdf.value = true
-  try { await baixarPdf(`personal/alunos/${aluHashid.value}/pdf`) } catch (e) { $q.notify({ message: 'Não foi possível gerar o PDF.', color: 'negative' }) } finally { gerandoPdf.value = false }
-}
 
 async function carregar () {
   if (aluHashid.value) aluno.value = (await api.get(`personal/alunos/${aluHashid.value}`)).data

@@ -1,6 +1,6 @@
 <template>
   <q-dialog :model-value="modelValue" @update:model-value="(v) => $emit('update:modelValue', v)" :maximized="$q.screen.lt.md" persistent>
-    <q-card class="ia-card column no-wrap">
+    <q-card class="ia-card column no-wrap" :class="{ 'ia-card--alta': etapa === 'conferir' }">
       <!-- topo -->
       <q-card-section class="row items-center no-wrap q-pb-sm">
         <q-icon name="auto_awesome" size="22px" class="q-mr-sm" />
@@ -58,7 +58,9 @@
         </q-tabs>
         <q-separator />
 
-        <q-tab-panels v-model="aba" animated class="col">
+        <!-- só esta área rola; topo (abas) e rodapé (botões) ficam fixos -->
+        <div ref="rolagem" class="col scroll rolagem">
+        <q-tab-panels v-model="aba" animated>
           <q-tab-panel v-for="f in fichas" :key="f.chave" :name="f.chave" class="q-pa-md">
             <!-- ficha já criada -->
             <div v-if="f.criada" class="criada q-pa-md q-mb-md row items-center">
@@ -115,6 +117,7 @@
             </fieldset>
           </q-tab-panel>
         </q-tab-panels>
+        </div>
 
         <q-separator />
         <q-card-actions class="q-px-md q-py-sm">
@@ -132,7 +135,7 @@
             </q-btn>
           </template>
           <template v-else>
-            <q-btn v-if="aluHashid && criadas.length" flat no-caps icon="picture_as_pdf" label="PDF com todas as fichas" :loading="gerandoPdf" @click="pdf" />
+            <BotaoPdf v-if="aluHashid && criadas.length" :url="`personal/alunos/${aluHashid}/pdf`" label="PDF com todas as fichas" />
             <q-space />
             <q-btn v-if="proxima" unelevated rounded no-caps class="bg-def text-white" icon-right="arrow_forward" :label="`Ir para ${rotulo(proxima)}`" @click="aba = proxima.chave" />
             <q-btn v-else unelevated rounded no-caps class="bg-def text-white" label="Concluir" @click="fechar" />
@@ -174,7 +177,7 @@ import { computed, onBeforeUnmount, reactive, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useQuasar } from 'quasar'
 import { api } from 'boot/api'
-import { baixarPdf } from 'src/pdf'
+import BotaoPdf from 'components/BotaoPdf.vue'
 
 const props = defineProps({
   modelValue: { type: Boolean, default: false },
@@ -195,8 +198,8 @@ const proposta = ref({ resumo: '', avisos: [] })
 const fichas = ref([])
 const aba = ref(null)
 const catalogo = ref({ musculos: [], metodos: [], pausas: [] })
-const gerandoPdf = ref(false)
 const verAvisos = ref(false)
+const rolagem = ref(null)
 const escolha = reactive({ aberta: false, ficha: null, item: null, busca: '' })
 let relogio = null
 
@@ -333,13 +336,6 @@ function abrirFicha (f) {
   router.push({ name: 'personal-ficha', params: { treHashid: f.criada } })
 }
 
-async function pdf () {
-  gerandoPdf.value = true
-  try { await baixarPdf(`personal/alunos/${props.aluHashid}/pdf`) } catch (erro) {
-    $q.notify({ message: 'Não foi possível gerar o PDF.', color: 'negative' })
-  } finally { gerandoPdf.value = false }
-}
-
 function fechar () {
   const faltam = etapa.value === 'conferir' ? fichas.value.filter((f) => !f.criada).length : 0
   if (!faltam) return emit('update:modelValue', false)
@@ -354,6 +350,9 @@ function mensagemErro (erro, padrao) {
 }
 
 // ao reabrir depois de concluir, começa do zero (o texto do pedido fica)
+// trocou de ficha: volta ao topo dela
+watch(aba, () => { if (rolagem.value) rolagem.value.scrollTop = 0 })
+
 watch(() => props.modelValue, (aberto) => {
   if (aberto && etapa.value === 'conferir' && !proxima.value) {
     etapa.value = 'pedido'
@@ -366,7 +365,9 @@ onBeforeUnmount(() => clearInterval(relogio))
 
 <style scoped>
 .ia-card { width: 900px; max-width: 96vw; border-radius: 18px; max-height: 92vh; }
-.q-dialog__inner--maximized .ia-card { border-radius: 0; max-height: none; }
+.ia-card--alta { height: 92vh; }
+.q-dialog__inner--maximized .ia-card { border-radius: 0; max-height: none; height: 100%; }
+.rolagem { min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; }
 .abas { padding: 0 8px; }
 .avisos { background: #FFF7DB; border: 1px solid #F1DE9A; border-radius: 12px; padding: 8px 10px; font-size: 12.5px; }
 .avisos > div + div { margin-top: 4px; }

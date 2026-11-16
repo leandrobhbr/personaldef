@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Aplicativo;
 
 use App\Http\Controllers\Controller;
 use App\Models\Treino;
+use App\Services\FichaPdfService;
 use App\Support\FichaFormato;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Fichas exclusivas do aluno do aparelho. Toda consulta filtra pelo aluno do token:
@@ -28,5 +30,14 @@ class AlunoFichaController extends Controller
         $treino = Treino::where('alu_id', $alunoId ?? 0)->where('tre_situacao', 'AT')->hashid($treHashid)->firstOrFail();
 
         return response()->json(FichaFormato::completa($treino));
+    }
+
+    /** PDF da ficha do próprio aluno (?modelo=simplificado|completo); ficha de outro aluno responde 404. */
+    public function pdf(Request $request, FichaPdfService $pdf, string $treHashid): Response
+    {
+        $alunoId = $request->attributes->get('acesso')->alu_id;
+        $treino = Treino::where('alu_id', $alunoId ?? 0)->where('tre_situacao', 'AT')->hashid($treHashid)->firstOrFail();
+
+        return $pdf->resposta($request, collect([$treino]));
     }
 }

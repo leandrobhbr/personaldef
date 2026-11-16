@@ -32,6 +32,7 @@ Route::prefix('app')->group(function () {
         Route::post('sair', [AcessoController::class, 'sair']);
         Route::get('minhas-fichas', [AlunoFichaController::class, 'index']);
         Route::get('minhas-fichas/{treHashid}', [AlunoFichaController::class, 'show']);
+        Route::get('minhas-fichas/{treHashid}/pdf', [AlunoFichaController::class, 'pdf']);
     });
 
     // Área do personal (Denilson)

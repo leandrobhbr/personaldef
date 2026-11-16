@@ -177,6 +177,24 @@ class FichaIaTest extends TestCase
         $this->getJson("/api/app/personal/alunos/{$aluno->alu_hashid}/pdf", ['Authorization' => "Bearer {$token}"])->assertForbidden();
     }
 
+    public function test_aluno_baixa_o_pdf_so_das_proprias_fichas(): void
+    {
+        $camila = Aluno::create(['alu_nome' => 'Camila Rocha']);
+        $outro = Aluno::create(['alu_nome' => 'Outro Aluno']);
+        $daCamila = Treino::create(['tre_titulo' => 'Treino A', 'alu_id' => $camila->alu_id, 'tre_data_cadastro' => now()]);
+        $daCamila->exercicios()->create(['exe_id' => $this->exe['terra']->exe_id, 'mus_id' => $this->exe['terra']->mus_id, 'tex_serie' => '3', 'tex_repeticao' => '12']);
+        $doOutro = Treino::create(['tre_titulo' => 'Treino X', 'alu_id' => $outro->alu_id, 'tre_data_cadastro' => now()]);
+        $link = LinkMagico::gerar($camila)['link'];
+        $token = ['Authorization' => 'Bearer '.$this->postJson('/api/app/entrar', ['token' => substr($link, strrpos($link, '/') + 1)])->json('token')];
+
+        $this->get("/api/app/minhas-fichas/{$daCamila->tre_hashid}/pdf?modelo=simplificado", $token)->assertOk()
+            ->assertHeader('Content-Disposition', 'inline; filename="Ficha simplificada - Camila Rocha - Treino A.pdf"');
+        $this->get("/api/app/minhas-fichas/{$daCamila->tre_hashid}/pdf", $token)->assertOk()
+            ->assertHeader('Content-Disposition', 'inline; filename="Ficha - Camila Rocha - Treino A.pdf"');
+        $this->getJson("/api/app/minhas-fichas/{$doOutro->tre_hashid}/pdf", $token)->assertNotFound();
+        $this->getJson("/api/app/minhas-fichas/{$daCamila->tre_hashid}/pdf")->assertUnauthorized();
+    }
+
     public function test_sem_chave_da_api_avisa_em_vez_de_quebrar(): void
     {
         config(['services.anthropic.key' => '']);
@@ -211,6 +229,15 @@ class FichaIaTest extends TestCase
         if ($saida = env('PDF_TESTE_SAIDA')) {
             file_put_contents($saida, $r->getContent());
         }
+
+        $simples = $this->get("/api/app/personal/alunos/{$aluno->alu_hashid}/pdf?modelo=simplificado", $this->headers)->assertOk()
+            ->assertHeader('Content-Disposition', 'inline; filename="Ficha simplificada - Camila Rocha.pdf"');
+        $this->assertStringStartsWith('%PDF', $simples->getContent());
+        $this->assertLessThan(strlen($r->getContent()), strlen($simples->getContent())); // sem imagens
+        if ($saida) {
+            file_put_contents(str_replace('.pdf', '-simplificado.pdf', $saida), $simples->getContent());
+        }
+        $this->getJson("/api/app/personal/alunos/{$aluno->alu_hashid}/pdf?modelo=outro", $this->headers)->assertStatus(422);
 
         $umaFicha = Treino::where('tre_titulo', 'Treino B · Peito')->first();
         $this->get("/api/app/personal/fichas/{$umaFicha->tre_hashid}/pdf", $this->headers)->assertOk()

@@ -8,7 +8,15 @@
       <h1 class="q-mt-sm q-mb-md" style="font-size: 24px">Olá, {{ primeiroNome }}!</h1>
       <q-spinner v-if="carregandoMinhas" color="dark" size="28px" />
       <div v-else-if="!minhas.length" class="cartao q-pa-md texto-suave">O Denilson ainda não publicou fichas para você. Assim que ele publicar, elas aparecem aqui.</div>
-      <FichaCartao v-for="f in minhas" :key="f.tre_hashid" :ficha="f" :to="{ name: 'minha-ficha', params: { treHashid: f.tre_hashid } }" />
+      <div v-for="f in minhas" :key="f.tre_hashid" class="q-mb-md">
+        <FichaCartao :ficha="f" :to="{ name: 'minha-ficha', params: { treHashid: f.tre_hashid } }" />
+        <div class="row" style="gap: 8px">
+          <q-btn outline rounded dense no-caps size="sm" class="q-px-sm" icon="table_rows" label="PDF simplificado"
+            :loading="gerando === f.tre_hashid + 'simplificado'" :disable="!f.qtd_exercicios" @click="pdf(f, 'simplificado')" />
+          <q-btn outline rounded dense no-caps size="sm" class="q-px-sm" icon="photo_library" label="PDF completo"
+            :loading="gerando === f.tre_hashid + 'completo'" :disable="!f.qtd_exercicios" @click="pdf(f, 'completo')" />
+        </div>
+      </div>
     </section>
 
     <!-- área livre: fichas genéricas do Denilson -->
@@ -35,12 +43,28 @@ import { api } from 'boot/api'
 import { sessao } from 'src/sessao'
 import FichaCartao from 'components/FichaCartao.vue'
 import InstalarApp from 'components/InstalarApp.vue'
+import { useQuasar } from 'quasar'
+import { baixarPdf } from 'src/pdf'
 
 const publicas = ref([])
 const minhas = ref([])
 const aviso = ref('')
 const carregando = ref(true)
 const carregandoMinhas = ref(false)
+const $q = useQuasar()
+const gerando = ref('') // ficha + modelo do PDF sendo gerado
+
+async function pdf (f, modelo) {
+  gerando.value = f.tre_hashid + modelo
+  try {
+    await baixarPdf(`minhas-fichas/${f.tre_hashid}/pdf?modelo=${modelo}`)
+  } catch (e) {
+    $q.notify({ message: 'Não foi possível gerar o PDF agora.', color: 'negative' })
+  } finally {
+    gerando.value = ''
+  }
+}
+
 const primeiroNome = computed(() => (sessao.aluno?.alu_nome || '').split(' ')[0])
 
 onMounted(async () => {
