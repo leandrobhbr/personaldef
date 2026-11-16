@@ -21,6 +21,10 @@
                 <q-item-section avatar><q-icon name="pin" /></q-item-section>
                 <q-item-section>Tenho um código do Denilson</q-item-section>
               </q-item>
+              <q-item clickable @click="atualizarApp">
+                <q-item-section avatar><q-icon name="system_update" /></q-item-section>
+                <q-item-section>Atualizar app</q-item-section>
+              </q-item>
               <q-item clickable tag="a" href="https://personaldef.com.br" target="_blank">
                 <q-item-section avatar><q-icon name="open_in_new" /></q-item-section>
                 <q-item-section>Site personaldef.com.br</q-item-section>
@@ -29,10 +33,20 @@
                 <q-item-section avatar><q-icon name="logout" /></q-item-section>
                 <q-item-section>Desconectar este aparelho</q-item-section>
               </q-item>
+              <q-item-label v-if="atualizacao.versao" caption class="q-px-md q-py-sm texto-suave">Versão {{ atualizacao.versao }}</q-item-label>
             </q-list>
           </q-menu>
         </q-btn>
       </q-toolbar>
+
+      <!-- faixa fixa quando o service worker acha versão nova -->
+      <q-banner v-if="atualizacao.disponivel" dense class="bg-acc" role="status">
+        <template #avatar><q-icon name="system_update" /></template>
+        <strong>Nova versão do aplicativo disponível.</strong>
+        <template #action>
+          <q-btn unelevated rounded no-caps dense class="bg-def text-white q-px-md" label="Atualizar" @click="atualizacao.atualizar()" />
+        </template>
+      </q-banner>
     </q-header>
 
     <q-page-container>
@@ -56,6 +70,7 @@ import { useRouter } from 'vue-router'
 import { api } from 'boot/api'
 import { sessao } from 'src/sessao'
 import { estadoPush, ativarPush } from 'src/push'
+import { atualizacao } from 'src/atualizacao'
 
 const $q = useQuasar()
 const router = useRouter()
@@ -71,6 +86,18 @@ async function alternarPush () {
     $q.notify({ message: 'Pronto! Você será avisado quando sair versão nova.', color: 'positive', icon: 'check' })
   } catch (e) {
     $q.notify({ message: e.message, color: 'negative' })
+  }
+}
+
+// "Atualizar app": procura versão nova agora; se houver, instala e recarrega
+async function atualizarApp () {
+  $q.loading.show({ message: 'Procurando versão nova…' })
+  try {
+    if (await atualizacao.forcar() === 'atual') {
+      $q.notify({ message: `Você já está na versão mais recente${atualizacao.versao ? ' (' + atualizacao.versao + ')' : ''}.`, color: 'positive', icon: 'check' })
+    }
+  } finally {
+    $q.loading.hide()
   }
 }
 

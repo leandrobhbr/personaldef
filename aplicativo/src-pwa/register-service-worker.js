@@ -1,22 +1,21 @@
-// Registro do service worker: quando sai versão nova, avisa e recarrega ao tocar em "Atualizar"
+// Registro do service worker: quando sai versão nova, mostra a faixa "Atualizar" (src/atualizacao.js)
 import { register } from 'register-service-worker'
 import { Notify } from 'quasar'
+import { atualizacao } from '../src/atualizacao'
+
+const procurarVersaoNova = (registro) => registro.update().catch(() => {})
 
 register(process.env.SERVICE_WORKER_FILE, {
   registrationOptions: { scope: '/app/' },
   ready (registro) {
-    window.__swRegistro = registro
-    // procura versão nova a cada 30 minutos com o app aberto
-    setInterval(() => registro.update(), 30 * 60 * 1000)
+    // procura versão nova a cada 30 minutos e sempre que o app volta para a tela
+    setInterval(() => procurarVersaoNova(registro), 30 * 60 * 1000)
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') procurarVersaoNova(registro)
+    })
   },
   updated () {
-    Notify.create({
-      message: 'Nova versão do aplicativo disponível.',
-      color: 'dark',
-      icon: 'system_update',
-      timeout: 0,
-      actions: [{ label: 'Atualizar', color: 'yellow-6', handler: () => window.location.reload() }]
-    })
+    atualizacao.avisar()
   },
   offline () {
     Notify.create({ message: 'Sem internet: mostrando as fichas salvas no aparelho.', color: 'grey-8', icon: 'wifi_off' })

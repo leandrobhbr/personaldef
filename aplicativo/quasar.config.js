@@ -11,7 +11,9 @@ export default defineConfig(() => ({
     publicPath: '/app/',
     vueRouterMode: 'hash',
     distDir: '../public/app',
-    target: { browser: ['es2022', 'firefox115', 'chrome115', 'safari15'] }
+    target: { browser: ['es2022', 'firefox115', 'chrome115', 'safari15'] },
+    // data/hora do build: aparece no menu ("Versão 16/11/2026 21:30") para conferir qual versão está rodando
+    env: { VERSAO_APP: new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo', dateStyle: 'short', timeStyle: 'short' }).replace(', ', ' ') }
   },
 
   devServer: {

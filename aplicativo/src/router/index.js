@@ -2,6 +2,7 @@ import { route } from 'quasar/wrappers'
 import { createRouter, createWebHashHistory } from 'vue-router'
 import routes from './routes'
 import { sessao } from 'src/sessao'
+import { atualizacao } from 'src/atualizacao'
 
 export default route(() => {
   const router = createRouter({ history: createWebHashHistory(), routes, scrollBehavior: () => ({ left: 0, top: 0 }) })
@@ -11,6 +12,9 @@ export default route(() => {
     if (to.meta.personal && !sessao.personal) return { name: 'entrar', query: { personal: 1 } }
     if (to.meta.aluno && !sessao.liberado) return { name: 'inicio' }
   })
+
+  // tela aberta antes de uma atualização tentou abrir um pedaço do app que não existe mais: recarrega na versão nova
+  router.onError((erro) => { atualizacao.recarregarSeVersaoVelha(erro) })
 
   return router
 })
