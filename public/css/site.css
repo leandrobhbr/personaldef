@@ -322,3 +322,37 @@ body.wam-open{overflow:hidden}
 @media (max-width:1180px){.app-top{padding:0 14px}}
 @media (max-width:1320px) and (min-width:1181px){.nav-desk{gap:20px}}
 @media (max-width:420px){.app-top span{display:none}.app-top{width:44px;padding:0}}
+
+/* Questionário dos serviços (/questionario) */
+.quest{max-width:760px;display:flex;flex-direction:column;gap:32px}
+.quest-topo{display:flex;flex-direction:column;gap:14px}
+.quest-form{display:flex;flex-direction:column;gap:14px}
+.quest-item{background:#fff;border:1px solid var(--line);border-radius:20px;padding:20px 22px;margin:0;min-width:0;box-sizing:border-box;transition:border-color .15s,box-shadow .15s}
+.quest-item legend{float:left;width:100%;padding:0}
+.quest-item legend+*{clear:both}
+.quest-rotulo{display:flex;align-items:flex-start;gap:10px;font-family:Montserrat,system-ui,sans-serif;font-weight:700;font-size:17px;line-height:1.35;color:var(--fg)}
+.quest-rotulo em{font-weight:500;font-style:normal;color:var(--muted);font-size:14px}
+.quest-num{flex:none;width:28px;height:28px;border-radius:50%;background:var(--ink);color:var(--accent);font-size:13px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;margin-top:-1px}
+.quest-ajuda{font-size:14px;color:var(--muted);margin-top:6px;padding-left:38px}
+.quest-opcoes{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.quest-op{position:relative}
+.quest-op input{position:absolute;opacity:0;width:1px;height:1px}
+.quest-op span{display:inline-flex;align-items:center;min-height:44px;padding:0 16px;box-sizing:border-box;border:1.5px solid var(--line);border-radius:999px;background:var(--bg);font-weight:600;font-size:15px;line-height:1.2;cursor:pointer;transition:background .15s,border-color .15s}
+.quest-op span:hover{border-color:var(--ink)}
+.quest-op input:checked+span{background:var(--ink);border-color:var(--ink);color:#fff}
+.quest-op input:focus-visible+span{outline:3px solid var(--ink);outline-offset:2px}
+.quest-campo{display:block;width:100%;box-sizing:border-box;min-height:46px;margin-top:8px;padding:10px 14px;border:1.5px solid var(--line);border-radius:12px;background:#fff;font:inherit;font-size:16px;color:var(--fg)}
+.quest-campo:focus{outline:none;border-color:var(--ink)}
+textarea.quest-campo{margin-top:14px;resize:vertical}
+.quest-qual{margin-top:12px}
+.quest-medidas{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:14px}
+.quest-medidas label{font-size:13.5px;font-weight:600;color:var(--muted)}
+.quest-lgpd{background:#F1F1EC;border:1px solid var(--line);border-left:5px solid var(--accent);border-radius:16px;padding:18px 20px;font-size:14px;line-height:1.55;color:var(--text);transition:border-color .15s,box-shadow .15s}
+.quest-lgpd b{color:var(--fg)}
+.quest-aceite{display:flex;align-items:flex-start;gap:10px;margin-top:14px;font-weight:600;font-size:15px;color:var(--fg);cursor:pointer}
+.quest-aceite input{flex:none;width:20px;height:20px;margin:2px 0 0;accent-color:var(--ink)}
+.quest-pendente{border-color:#B3261E;box-shadow:0 0 0 3px rgba(179,38,30,.12)}
+.quest-erro{color:#B3261E;font-size:13.5px;font-weight:600;margin-top:10px}
+.quest-enviar{align-self:stretch;border:0;margin-top:6px}
+.quest-enviado{padding:14px 16px;border-radius:14px;background:#EEF8EE;border:1px solid #CBE8CB;font-size:15px}
+@media (max-width:520px){.quest-item{padding:18px 16px}.quest-ajuda{padding-left:0}.quest-op span{padding:0 14px;font-size:14.5px}}

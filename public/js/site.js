@@ -68,6 +68,84 @@
     });
   }
 
+  // Questionário dos serviços (/questionario?tipo=online|presencial): valida, monta a mensagem com as respostas e abre o
+  // WhatsApp. Nada é enviado ao site. Nome só no cabeçalho, para o Denilson copiar o bloco de respostas para a IA.
+  var quest = document.querySelector('[data-quest]');
+  if (quest) {
+    var questSec = document.getElementById('questionario');
+    var questValor = function (bloco) {
+      var tipo = bloco.dataset.tipo;
+      if (tipo === 'opcoes') { var r = bloco.querySelector('input:checked'); return r ? r.value : ''; }
+      if (tipo === 'varias') return Array.prototype.map.call(bloco.querySelectorAll('input:checked'), function (c) { return c.value; }).join(', ');
+      if (tipo === 'medidas') {
+        var partes = Array.prototype.map.call(bloco.querySelectorAll('input'), function (c) { var v = c.value.trim(); return v ? v + ' ' + c.dataset.unidade : ''; });
+        return partes[0] ? partes.filter(Boolean).join(', ') : ''; // idade é o mínimo
+      }
+      if (tipo === 'sim_qual') {
+        var sq = bloco.querySelector('input[type="radio"]:checked');
+        if (!sq) return '';
+        if (sq.value === 'Não') return 'Não';
+        var qual = bloco.querySelector('[data-qual]').value.trim();
+        return qual ? 'Sim, ' + qual : '';
+      }
+      return bloco.querySelector('textarea').value.trim();
+    };
+    var questMarca = function (bloco, erro) {
+      bloco.classList.toggle('quest-pendente', erro);
+      bloco.querySelector('.quest-erro').hidden = !erro;
+    };
+
+    // "Sim" mostra o campo "Qual?"
+    quest.querySelectorAll('[data-tipo="sim_qual"]').forEach(function (bloco) {
+      bloco.addEventListener('change', function () {
+        var sim = bloco.querySelector('input[value="Sim"]').checked;
+        var qual = bloco.querySelector('[data-qual]');
+        qual.hidden = !sim;
+        if (sim && !qual.value) qual.focus();
+      });
+    });
+    // tira o aviso de pendente assim que a pessoa responde
+    quest.addEventListener('input', function (e) { var b = e.target.closest('.quest-item, .quest-lgpd'); if (b && b.classList.contains('quest-pendente')) questMarca(b, false); });
+    quest.addEventListener('change', function (e) { var b = e.target.closest('.quest-item, .quest-lgpd'); if (b && b.classList.contains('quest-pendente')) questMarca(b, false); });
+
+    quest.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var pendentes = [];
+      var nome = quest.querySelector('[name="nome"]').value.trim();
+      var blocoNome = quest.querySelector('[data-q-nome]');
+      questMarca(blocoNome, !nome);
+      if (!nome) pendentes.push(blocoNome);
+
+      var linhas = [questSec.dataset.intro, 'Nome: ' + nome, '', '*Respostas do questionário*'];
+      quest.querySelectorAll('[data-q]').forEach(function (bloco) {
+        var v = questValor(bloco);
+        var falta = !v && bloco.hasAttribute('data-obrigatoria');
+        questMarca(bloco, falta);
+        if (falta) pendentes.push(bloco);
+        if (v) linhas.push(bloco.dataset.rotulo + ': ' + v);
+      });
+
+      var aceite = quest.querySelector('[data-q-aceite]');
+      var aceitou = aceite.querySelector('input').checked;
+      questMarca(aceite, !aceitou);
+      if (!aceitou) pendentes.push(aceite);
+
+      if (pendentes.length) {
+        pendentes[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+        var campo = pendentes[0].querySelector('input, textarea');
+        if (campo) campo.focus({ preventScroll: true });
+        return;
+      }
+
+      var url = 'https://wa.me/' + questSec.dataset.numero + '?text=' + encodeURIComponent(linhas.join('\n'));
+      var aviso = quest.querySelector('[data-enviado]');
+      aviso.querySelector('[data-enviado-link]').href = url;
+      aviso.hidden = false;
+      var janela = window.open(url, '_blank');
+      if (janela) janela.opener = null; else window.location.href = url;
+    });
+  }
+
   // Slide de fotos dos depoimentos: botões [data-galeria] trazem a lista de fotos em JSON
   var lb = document.getElementById('galeria-modal');
   if (lb) {

@@ -42,6 +42,12 @@ final class ClaudeSugeridorFichas implements SugeridorFichas
         - Regra geral dita antes da primeira ficha (ex.: "REPETIÇÕES DE 10-15 ... TODOS DA FICHA") vale para TODAS as
           fichas; dita dentro de uma ficha ("TUDO 3X10 A 15"), vale para aquela ficha. Escreva a regra geral em
           orientacoes de cada ficha a que ela se aplica.
+        - O pedido pode trazer informações sobre o aluno (ex.: respostas de um questionário: objetivo, experiência,
+          dor/lesão, restrição médica, onde treina, tempo por treino). Elas são contexto, não exercícios: use para
+          escolher a variação certa do catálogo (quem treina em casa com halteres → halteres ou peso do corpo, não
+          máquina), avise em avisos quando um exercício pedido conflitar com uma dor ou restrição citada, e coloque
+          cuidados curtos em orientacoes ("Evite impacto no joelho direito."). Não acrescente exercícios por causa
+          delas e não cite doenças no titulo.
         - exercicio_id: o id (número no começo da linha) do exercício do catálogo que melhor corresponde ao que foi
           pedido, considerando o equipamento (barra, halteres/"alteres", cabo/polia, máquina, peso do corpo) e a posição.
           Se nada no catálogo corresponder razoavelmente, use null — nunca um id que não esteja na lista. Quando o

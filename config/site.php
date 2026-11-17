@@ -134,6 +134,8 @@ return [
             'cta' => 'Solicitar orçamento',
             'tipo' => 'online',
             'message' => 'Olá Denilson! Quero solicitar um orçamento da Consultoria de Treino Online.',
+            // em vez do modal do WhatsApp, leva ao questionário (as respostas vão juntas na mensagem)
+            'link' => '/questionario?tipo=online',
         ],
         [
             'icon' => 'local',
@@ -149,6 +151,7 @@ return [
             'cta' => 'Solicitar orçamento',
             'tipo' => 'presencial',
             'message' => 'Olá Denilson! Quero solicitar um orçamento do Personal Trainer Presencial em Marília.',
+            'link' => '/questionario?tipo=presencial',
         ],
     ],
 
@@ -381,6 +384,47 @@ return [
             'reading' => 6,
             'excerpt' => 'Como adaptar o treino a limitações e fortalecer a região com segurança e orientação profissional.',
         ],
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Questionário dos serviços (/questionario?tipo=online|presencial)
+    |--------------------------------------------------------------------------
+    |
+    | Usado pela Consultoria Online e pelo Personal Presencial (título e 1ª linha
+    | da mensagem vêm de 'servicos'). Nada é salvo no site: a página monta a
+    | mensagem com as respostas e abre o WhatsApp. O Denilson cola o bloco de respostas no pedido do "Fichas com IA".
+    | 'rotulo' é o nome da resposta na mensagem. Tipos: opcoes (uma), varias
+    | (várias), texto, medidas (idade, peso e altura), sim_qual (Não / Sim + qual).
+    |
+    */
+
+    'questionario' => [
+        ['rotulo' => 'Objetivo', 'pergunta' => 'Qual é o seu principal objetivo?', 'tipo' => 'opcoes',
+            'opcoes' => ['Emagrecer', 'Ganhar massa muscular', 'Condicionamento', 'Saúde e qualidade de vida', 'Voltar a treinar após lesão', 'Outro']],
+        ['rotulo' => 'Idade/peso/altura', 'pergunta' => 'Sua idade, peso e altura', 'tipo' => 'medidas'],
+        ['rotulo' => 'Experiência', 'pergunta' => 'Há quanto tempo você treina musculação?', 'tipo' => 'opcoes',
+            'opcoes' => ['Nunca treinei', 'Parado(a) há mais de 6 meses', 'Menos de 1 ano', '1 a 3 anos', 'Mais de 3 anos']],
+        ['rotulo' => 'Dias por semana', 'pergunta' => 'Quantos dias por semana você pode treinar?', 'tipo' => 'opcoes',
+            'opcoes' => ['2', '3', '4', '5', '6']],
+        ['rotulo' => 'Tempo por treino', 'pergunta' => 'Quanto tempo você tem por treino?', 'tipo' => 'opcoes',
+            'opcoes' => ['30 min', '45 min', '1 hora', 'Mais de 1 hora']],
+        ['rotulo' => 'Onde treina', 'pergunta' => 'Onde você vai treinar?', 'tipo' => 'opcoes',
+            'opcoes' => ['Academia completa', 'Academia de condomínio ou prédio', 'Em casa, com halteres ou elásticos', 'Em casa, sem equipamento', 'Ao ar livre']],
+        ['rotulo' => 'Dor/lesão/saúde', 'pergunta' => 'Você tem alguma dor, lesão, cirurgia ou problema de saúde?',
+            'ajuda' => 'Ex.: coluna, joelho, ombro, pressão alta, diabetes, coração.', 'tipo' => 'sim_qual'],
+        ['rotulo' => 'Restrição médica', 'pergunta' => 'Algum médico já restringiu algum tipo de exercício para você?', 'tipo' => 'sim_qual'],
+        ['rotulo' => 'Foco', 'pergunta' => 'Quer dar mais atenção a alguma parte do corpo?', 'ajuda' => 'Pode marcar mais de uma.', 'tipo' => 'varias',
+            'opcoes' => ['Glúteos', 'Pernas', 'Abdômen', 'Braços', 'Costas e postura', 'Peito', 'Corpo todo por igual']],
+        ['rotulo' => 'Observações', 'pergunta' => 'Algum exercício que você gosta, não gosta, ou algo mais que o Denilson deva saber?',
+            'tipo' => 'texto', 'opcional' => true],
+    ],
+
+    // Aviso de LGPD do questionário (as perguntas 7 e 8 são dados de saúde: dado sensível, art. 11)
+    'questionario_lgpd' => [
+        'titulo' => 'Seus dados (LGPD)',
+        'texto' => 'As respostas não ficam salvas neste site: vão direto para o WhatsApp do Denilson e são usadas só para avaliar e montar o seu treino. As perguntas sobre saúde tratam de dados que a LGPD considera sensíveis; responda só o que se sentir à vontade. Para agilizar a montagem da ficha, o Denilson pode usar uma ferramenta de inteligência artificial com as suas respostas, sem o seu nome nem o seu telefone. Você pode pedir a qualquer momento que ele apague a conversa.',
+        'consentimento' => 'Concordo em enviar estas informações ao Denilson para a avaliação e a montagem do meu treino.',
     ],
 
 ];

@@ -142,7 +142,12 @@
           @endforeach
         </ul>
         <div class="plan-foot">
-          <a class="btn btn-d" href="{{ $wa($servico['message']) }}" target="_blank" rel="noopener" data-wa-open data-wa-tipo="{{ $servico['tipo'] }}">{{ $servico['cta'] }}</a>
+          @if (! empty($servico['link']))
+            {{-- questionário curto antes do WhatsApp (online e presencial) --}}
+            <a class="btn btn-d" href="{{ url($servico['link']) }}">{{ $servico['cta'] }}</a>
+          @else
+            <a class="btn btn-d" href="{{ $wa($servico['message']) }}" target="_blank" rel="noopener" data-wa-open data-wa-tipo="{{ $servico['tipo'] }}">{{ $servico['cta'] }}</a>
+          @endif
         </div>
       </article>
     @endforeach
