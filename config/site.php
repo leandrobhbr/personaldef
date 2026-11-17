@@ -134,8 +134,8 @@ return [
             'cta' => 'Solicitar orçamento',
             'tipo' => 'online',
             'message' => 'Olá Denilson! Quero solicitar um orçamento da Consultoria de Treino Online.',
-            // em vez do modal do WhatsApp, leva ao questionário (as respostas vão juntas na mensagem)
-            'link' => '/questionario?tipo=online',
+            // em vez do modal do WhatsApp, abre o questionário (as respostas vão juntas na mensagem)
+            'questionario' => true,
         ],
         [
             'icon' => 'local',
@@ -151,7 +151,7 @@ return [
             'cta' => 'Solicitar orçamento',
             'tipo' => 'presencial',
             'message' => 'Olá Denilson! Quero solicitar um orçamento do Personal Trainer Presencial em Marília.',
-            'link' => '/questionario?tipo=presencial',
+            'questionario' => true,
         ],
     ],
 
@@ -388,7 +388,7 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Questionário dos serviços (/questionario?tipo=online|presencial)
+    | Questionário dos serviços (modal na home: partials/questionario-modal)
     |--------------------------------------------------------------------------
     |
     | Usado pela Consultoria Online e pelo Personal Presencial (título e 1ª linha

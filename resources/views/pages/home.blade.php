@@ -142,9 +142,9 @@
           @endforeach
         </ul>
         <div class="plan-foot">
-          @if (! empty($servico['link']))
-            {{-- questionário curto antes do WhatsApp (online e presencial) --}}
-            <a class="btn btn-d" href="{{ url($servico['link']) }}">{{ $servico['cta'] }}</a>
+          @if (! empty($servico['questionario']))
+            {{-- abre o questionário (modal); sem JavaScript, cai direto no WhatsApp --}}
+            <a class="btn btn-d" href="{{ $wa($servico['message']) }}" target="_blank" rel="noopener" data-quest-open="{{ $servico['tipo'] }}">{{ $servico['cta'] }}</a>
           @else
             <a class="btn btn-d" href="{{ $wa($servico['message']) }}" target="_blank" rel="noopener" data-wa-open data-wa-tipo="{{ $servico['tipo'] }}">{{ $servico['cta'] }}</a>
           @endif
@@ -387,5 +387,6 @@
 
 <!-- Slide de fotos: diplomas (Sobre) e fotos dos depoimentos -->
 @include('partials.galeria-modal')
+@include('partials.questionario-modal')
 
 @endsection

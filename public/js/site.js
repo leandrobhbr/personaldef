@@ -68,12 +68,23 @@
     });
   }
 
-  // Questionário dos serviços (/questionario?tipo=online|presencial): valida, monta a mensagem com as respostas e abre o
-  // WhatsApp. Nada é enviado ao site. Nome só no cabeçalho, para o Denilson copiar o bloco de respostas para a IA.
-  var quest = document.querySelector('[data-quest]');
-  if (quest) {
-    var questSec = document.getElementById('questionario');
-    var questValor = function (bloco) {
+  // Questionário dos serviços em modal, uma pergunta por vez (partials/questionario-modal). Abre pelos botões
+  // [data-quest-open] ou por /?questionario=online|presencial. Monta a mensagem com as respostas e abre o WhatsApp;
+  // nada é enviado ao site. Nome só no cabeçalho, para o Denilson copiar o bloco de respostas para a IA.
+  var qm = document.getElementById('quest-modal');
+  if (qm) {
+    var qForm = qm.querySelector('[data-quest]');
+    var qPassos = Array.prototype.slice.call(qForm.querySelectorAll('[data-passo]'));
+    var qServicos = JSON.parse(qm.dataset.servicos);
+    var qVoltar = qm.querySelector('[data-qm-voltar]');
+    var qProxima = qm.querySelector('[data-qm-proxima]');
+    var qEnviar = qm.querySelector('[data-qm-enviar]');
+    var qEnviado = qm.querySelector('[data-enviado]');
+    var qPanel = qm.querySelector('.qm-panel');
+    var qAtual = 0, qTipo = 'online', qOrigem = null, qAvanco = null;
+    var qTotal = qForm.querySelectorAll('[data-q]').length;
+
+    var qValor = function (bloco) {
       var tipo = bloco.dataset.tipo;
       if (tipo === 'opcoes') { var r = bloco.querySelector('input:checked'); return r ? r.value : ''; }
       if (tipo === 'varias') return Array.prototype.map.call(bloco.querySelectorAll('input:checked'), function (c) { return c.value; }).join(', ');
@@ -90,60 +101,101 @@
       }
       return bloco.querySelector('textarea').value.trim();
     };
-    var questMarca = function (bloco, erro) {
-      bloco.classList.toggle('quest-pendente', erro);
-      bloco.querySelector('.quest-erro').hidden = !erro;
+    var qMarca = function (passo, erro) {
+      passo.classList.toggle('quest-pendente', erro);
+      passo.querySelector('.quest-erro').hidden = !erro;
+    };
+    var qValido = function (passo) {
+      var ok = true;
+      if (passo.hasAttribute('data-q-nome')) ok = !!passo.querySelector('input').value.trim();
+      else if (passo.hasAttribute('data-q-aceite')) ok = passo.querySelector('input').checked;
+      else if (passo.hasAttribute('data-obrigatoria')) ok = !!qValor(passo);
+      qMarca(passo, !ok);
+      return ok;
+    };
+    var qMostra = function (i) {
+      clearTimeout(qAvanco);
+      qAtual = i;
+      qPassos.forEach(function (p, k) { p.hidden = k !== i; });
+      var ultimo = i === qPassos.length - 1;
+      qVoltar.style.visibility = i === 0 ? 'hidden' : 'visible';
+      qProxima.hidden = ultimo;
+      qEnviar.hidden = !ultimo;
+      qm.querySelector('[data-qm-contador]').textContent = i === 0 ? 'Antes de começar' : (ultimo ? 'Último passo' : 'Pergunta ' + i + ' de ' + qTotal);
+      qm.querySelector('[data-qm-barra]').style.width = Math.round(i / (qPassos.length - 1) * 100) + '%';
+      qPanel.scrollTop = 0;
+      // foco no campo de texto da pergunta (nas de opções, o foco fica no passo, sem abrir o teclado)
+      var campo = qPassos[i].querySelector('input[type="text"]:not([hidden]), textarea');
+      if (campo) campo.focus({ preventScroll: true });
+    };
+    var qProximo = function () { if (qValido(qPassos[qAtual]) && qAtual < qPassos.length - 1) qMostra(qAtual + 1); };
+    var qAbrir = function (tipo) {
+      qTipo = qServicos[tipo] ? tipo : 'online';
+      qm.querySelector('[data-qm-servico]').textContent = qServicos[qTipo].titulo;
+      qEnviado.hidden = true;
+      qm.querySelector('[data-qm-acoes]').hidden = false;
+      qm.querySelector('.qm-progresso').hidden = false;
+      qm.querySelector('[data-qm-contador]').hidden = false;
+      qm.hidden = false;
+      document.body.classList.add('wam-open');
+      qMostra(0);
+    };
+    var qFechar = function () {
+      clearTimeout(qAvanco);
+      qm.hidden = true;
+      document.body.classList.remove('wam-open');
+      if (qOrigem) qOrigem.focus();
     };
 
-    // "Sim" mostra o campo "Qual?"
-    quest.querySelectorAll('[data-tipo="sim_qual"]').forEach(function (bloco) {
-      bloco.addEventListener('change', function () {
-        var sim = bloco.querySelector('input[value="Sim"]').checked;
-        var qual = bloco.querySelector('[data-qual]');
-        qual.hidden = !sim;
-        if (sim && !qual.value) qual.focus();
-      });
+    document.querySelectorAll('[data-quest-open]').forEach(function (botao) {
+      botao.addEventListener('click', function (e) { e.preventDefault(); qOrigem = botao; qAbrir(botao.dataset.questOpen); });
     });
-    // tira o aviso de pendente assim que a pessoa responde
-    quest.addEventListener('input', function (e) { var b = e.target.closest('.quest-item, .quest-lgpd'); if (b && b.classList.contains('quest-pendente')) questMarca(b, false); });
-    quest.addEventListener('change', function (e) { var b = e.target.closest('.quest-item, .quest-lgpd'); if (b && b.classList.contains('quest-pendente')) questMarca(b, false); });
+    qm.querySelectorAll('[data-qm-fechar]').forEach(function (b) { b.addEventListener('click', qFechar); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !qm.hidden) qFechar(); });
+    qVoltar.addEventListener('click', function () { if (qAtual > 0) qMostra(qAtual - 1); });
+    qProxima.addEventListener('click', qProximo);
 
-    quest.addEventListener('submit', function (e) {
+    qForm.addEventListener('change', function (e) {
+      var passo = qPassos[qAtual];
+      if (passo.classList.contains('quest-pendente')) qMarca(passo, false);
+      var tipo = passo.dataset.tipo;
+      if (tipo === 'sim_qual') {
+        var sim = passo.querySelector('input[value="Sim"]').checked;
+        var qual = passo.querySelector('[data-qual]');
+        qual.hidden = !sim;
+        if (sim) { qual.focus(); return; }
+      }
+      // uma opção só (ou "Não"): avança sozinho
+      if (e.target.type === 'radio' && (tipo === 'opcoes' || tipo === 'sim_qual')) qAvanco = setTimeout(qProximo, 260);
+    });
+    qForm.addEventListener('input', function () { var p = qPassos[qAtual]; if (p.classList.contains('quest-pendente')) qMarca(p, false); });
+    // Enter num campo de texto: próxima pergunta
+    qForm.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' && e.target.tagName === 'INPUT' && e.target.type === 'text') { e.preventDefault(); qProximo(); }
+    });
+
+    qForm.addEventListener('submit', function (e) {
       e.preventDefault();
-      var pendentes = [];
-      var nome = quest.querySelector('[name="nome"]').value.trim();
-      var blocoNome = quest.querySelector('[data-q-nome]');
-      questMarca(blocoNome, !nome);
-      if (!nome) pendentes.push(blocoNome);
-
-      var linhas = [questSec.dataset.intro, 'Nome: ' + nome, '', '*Respostas do questionário*'];
-      quest.querySelectorAll('[data-q]').forEach(function (bloco) {
-        var v = questValor(bloco);
-        var falta = !v && bloco.hasAttribute('data-obrigatoria');
-        questMarca(bloco, falta);
-        if (falta) pendentes.push(bloco);
+      if (!qValido(qPassos[qAtual])) return;
+      var linhas = [qServicos[qTipo].intro, 'Nome: ' + qForm.querySelector('[name="nome"]').value.trim(), '', '*Respostas do questionário*'];
+      qForm.querySelectorAll('[data-q]').forEach(function (bloco) {
+        var v = qValor(bloco);
         if (v) linhas.push(bloco.dataset.rotulo + ': ' + v);
       });
-
-      var aceite = quest.querySelector('[data-q-aceite]');
-      var aceitou = aceite.querySelector('input').checked;
-      questMarca(aceite, !aceitou);
-      if (!aceitou) pendentes.push(aceite);
-
-      if (pendentes.length) {
-        pendentes[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
-        var campo = pendentes[0].querySelector('input, textarea');
-        if (campo) campo.focus({ preventScroll: true });
-        return;
-      }
-
-      var url = 'https://wa.me/' + questSec.dataset.numero + '?text=' + encodeURIComponent(linhas.join('\n'));
-      var aviso = quest.querySelector('[data-enviado]');
-      aviso.querySelector('[data-enviado-link]').href = url;
-      aviso.hidden = false;
+      var url = 'https://wa.me/' + qm.dataset.numero + '?text=' + encodeURIComponent(linhas.join('\n'));
+      qPassos.forEach(function (p) { p.hidden = true; });
+      qm.querySelector('[data-qm-acoes]').hidden = true;
+      qm.querySelector('.qm-progresso').hidden = true;
+      qm.querySelector('[data-qm-contador]').hidden = true;
+      qEnviado.querySelector('[data-enviado-link]').href = url;
+      qEnviado.hidden = false;
       var janela = window.open(url, '_blank');
       if (janela) janela.opener = null; else window.location.href = url;
     });
+
+    // /questionario?tipo=... redireciona para /?questionario=...
+    var qParam = new URLSearchParams(window.location.search).get('questionario');
+    if (qParam) qAbrir(qParam);
   }
 
   // Slide de fotos dos depoimentos: botões [data-galeria] trazem a lista de fotos em JSON

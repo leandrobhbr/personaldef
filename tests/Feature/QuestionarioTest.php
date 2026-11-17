@@ -5,45 +5,45 @@ namespace Tests\Feature;
 use Tests\TestCase;
 
 /**
- * Questionário dos serviços (/questionario?tipo=online|presencial): página sem banco, que monta a mensagem do WhatsApp
- * no navegador. Aqui se confere o que a página entrega e os botões "Solicitar orçamento" da home.
+ * Questionário dos serviços: modal na home (uma pergunta por vez), sem banco. A mensagem do WhatsApp é montada no
+ * navegador; aqui se confere o que a home entrega, os botões "Solicitar orçamento" e o endereço /questionario.
  */
 class QuestionarioTest extends TestCase
 {
-    public function test_questionario_tem_as_10_perguntas_o_aviso_lgpd_e_nao_e_indexado(): void
+    public function test_home_tem_o_modal_com_as_10_perguntas_e_o_aviso_lgpd(): void
     {
-        $r = $this->get('/questionario?tipo=online')->assertOk()
-            ->assertSee('noindex,nofollow', false)
-            ->assertSee('Consultoria de Treino Online')
-            ->assertSee('data-intro="Olá Denilson! Quero solicitar um orçamento da Consultoria de Treino Online."', false)
+        $r = $this->get('/')->assertOk()
+            ->assertSee('id="quest-modal"', false)
             ->assertSee('Seus dados (LGPD)')
             ->assertSee('sem o seu nome nem o seu telefone')
             ->assertSee(config('site.questionario_lgpd.consentimento'));
+        $html = $r->getContent();
 
-        $this->assertSame(10, substr_count($r->getContent(), 'data-q '));
+        $this->assertSame(10, substr_count($html, 'data-q data-rotulo'));
+        $this->assertSame(12, substr_count($html, 'data-passo')); // nome + 10 perguntas + LGPD
         foreach (config('site.questionario') as $q) {
             $r->assertSee($q['pergunta']);
         }
+        // a mensagem de cada serviço vai para o modal (1ª linha do WhatsApp)
+        $r->assertSee('Quero solicitar um orçamento da Consultoria de Treino Online.')
+            ->assertSee('Quero solicitar um orçamento do Personal Trainer Presencial em Marília.');
     }
 
-    public function test_presencial_usa_o_mesmo_questionario_com_a_mensagem_dele(): void
-    {
-        $this->get('/questionario?tipo=presencial')->assertOk()
-            ->assertSee('<span class="tag">Personal Trainer Presencial</span>', false)
-            ->assertSee('data-intro="Olá Denilson! Quero solicitar um orçamento do Personal Trainer Presencial em Marília."', false);
-
-        // tipo desconhecido ou ausente: consultoria online
-        $this->get('/questionario')->assertOk()->assertSee('<span class="tag">Consultoria de Treino Online</span>', false);
-        $this->get('/questionario?tipo=outro')->assertOk()->assertSee('<span class="tag">Consultoria de Treino Online</span>', false);
-    }
-
-    public function test_botoes_de_orcamento_da_home_levam_ao_questionario(): void
+    public function test_botoes_de_orcamento_abrem_o_questionario_e_sem_js_caem_no_whatsapp(): void
     {
         $html = $this->get('/')->assertOk()->getContent();
 
-        $this->assertStringContainsString('href="'.url('/questionario?tipo=online').'">Solicitar orçamento</a>', $html);
-        $this->assertStringContainsString('href="'.url('/questionario?tipo=presencial').'">Solicitar orçamento</a>', $html);
-        // os outros botões de WhatsApp continuam abrindo o modal
+        $this->assertMatchesRegularExpression('/href="https:\/\/wa\.me\/[^"]+"[^>]*data-quest-open="online">Solicitar orçamento/', $html);
+        $this->assertMatchesRegularExpression('/href="https:\/\/wa\.me\/[^"]+"[^>]*data-quest-open="presencial">Solicitar orçamento/', $html);
+        // os outros botões de WhatsApp continuam abrindo o modal do WhatsApp
         $this->assertStringContainsString('data-wa-open', $html);
+    }
+
+    public function test_endereco_questionario_abre_a_home_com_o_modal(): void
+    {
+        $this->get('/questionario?tipo=presencial')->assertRedirect('/?questionario=presencial');
+        $this->get('/questionario?tipo=online')->assertRedirect('/?questionario=online');
+        $this->get('/questionario')->assertRedirect('/?questionario=online');
+        $this->get('/questionario?tipo=outro')->assertRedirect('/?questionario=online');
     }
 }
