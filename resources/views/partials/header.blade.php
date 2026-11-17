@@ -5,6 +5,7 @@
       ['label' => 'Serviços', 'href' => route('home').'#servicos'],
       ['label' => 'Como Funciona', 'href' => route('home').'#como-funciona'],
       ['label' => 'Fichas', 'href' => route('home').'#fichas'],
+      ['label' => 'Concursos', 'href' => route('home').'#concursos'],
       ['label' => 'Blog', 'href' => route('home').'#blog'],
       ['label' => 'Contato', 'href' => route('home').'#contato'],
   ];

@@ -28,7 +28,7 @@
     <div style="padding-top: 24px; border-top: 1px solid #DCDCD5; display: flex; flex-wrap: wrap; gap: 12px; justify-content: space-between; font-size: 13px; color: #55585E">
       <span>© {{ date('Y') }} {{ config('site.domain') }} · Todos os direitos reservados.</span>
       <span>{{ config('site.owner_name') }} · Personal Trainer · {{ config('site.city') }}</span>
-      <span>Desenvolvido por <a href="https://bhnaweb.com.br" target="_blank" rel="noopener" style="font-weight: 600">bhnaweb.com.br</a></span>
+      <span style="display: inline-flex; align-items: center; gap: 6px">Desenvolvido por <a href="https://bhnaweb.com.br" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; gap: 6px; font-weight: 600"><img src="{{ asset('images/bhnaweb.png') }}" alt="" width="18" height="18" style="display: block">bhnaweb.com.br</a></span>
     </div>
   </div>
 </footer>

@@ -4,7 +4,8 @@
   Perguntas e aviso de LGPD em config/site.php.
 --}}
 @php
-  $qmServicos = collect(config('site.servicos'))->mapWithKeys(fn ($s) => [$s['tipo'] => ['titulo' => $s['title'], 'intro' => $s['message']]]);
+  $qmServicos = collect(config('site.servicos'))->mapWithKeys(fn ($s) => [$s['tipo'] => ['titulo' => $s['title'], 'intro' => $s['message']]])
+      ->put('concurso', ['titulo' => config('site.concurso.titulo'), 'intro' => config('site.concurso.mensagem')]);
   $qmLgpd = config('site.questionario_lgpd');
   $qmPerguntas = config('site.questionario');
 @endphp
@@ -43,6 +44,17 @@
                   <label class="quest-op"><input type="{{ $q['tipo'] === 'varias' ? 'checkbox' : 'radio' }}" name="q{{ $i }}" value="{{ $op }}"><span>{{ $op }}</span></label>
                 @endforeach
               </div>
+              @if (! empty($q['sub']))
+                {{-- ex.: objetivo "concurso" → "Qual concurso?" --}}
+                <div class="quest-sub" data-sub data-quando="{{ $q['sub']['quando'] }}" data-rotulo="{{ $q['sub']['rotulo'] }}" hidden>
+                  <p class="quest-sub-rot">{{ $q['sub']['pergunta'] }}</p>
+                  <div class="quest-opcoes quest-opcoes--chips">
+                    @foreach (config('site.concurso.opcoes') as [$op])
+                      <label class="quest-op"><input type="radio" name="q{{ $i }}_sub" value="{{ $op }}"><span>{{ $op }}</span></label>
+                    @endforeach
+                  </div>
+                </div>
+              @endif
               @break
             @case('medidas')
               <div class="quest-medidas">

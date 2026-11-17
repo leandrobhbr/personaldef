@@ -15,7 +15,7 @@
     toggle.addEventListener('click', function () { setMenu(menu.hidden); });
     menu.addEventListener('click', function (e) { if (e.target.closest('a')) setMenu(false); });
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !menu.hidden) setMenu(false); });
-    window.addEventListener('resize', function () { if (window.innerWidth > 1180 && !menu.hidden) setMenu(false); });
+    window.addEventListener('resize', function () { if (window.innerWidth > 1280 && !menu.hidden) setMenu(false); });
   }
 
   // Modal do WhatsApp: pergunta o que a pessoa procura antes de abrir a conversa
@@ -86,7 +86,7 @@
 
     var qValor = function (bloco) {
       var tipo = bloco.dataset.tipo;
-      if (tipo === 'opcoes') { var r = bloco.querySelector('input:checked'); return r ? r.value : ''; }
+      if (tipo === 'opcoes') { var r = bloco.querySelector('.quest-opcoes:not(.quest-opcoes--chips) input:checked'); return r ? r.value : ''; }
       if (tipo === 'varias') return Array.prototype.map.call(bloco.querySelectorAll('input:checked'), function (c) { return c.value; }).join(', ');
       if (tipo === 'medidas') {
         var partes = Array.prototype.map.call(bloco.querySelectorAll('input'), function (c) { var v = c.value.trim(); return v ? v + ' ' + c.dataset.unidade : ''; });
@@ -101,15 +101,28 @@
       }
       return bloco.querySelector('textarea').value.trim();
     };
-    var qMarca = function (passo, erro) {
+    // subpergunta (ex.: "Qual concurso?"): aparece quando a resposta principal é a do data-quando
+    var qSub = function (bloco) {
+      var sub = bloco.querySelector('[data-sub]');
+      if (!sub) return null;
+      sub.hidden = qValor(bloco) !== sub.dataset.quando;
+      return sub.hidden ? null : sub;
+    };
+    var qSubValor = function (sub) { var r = sub.querySelector('input:checked'); return r ? r.value : ''; };
+    var qMarca = function (passo, erro, texto) {
       passo.classList.toggle('quest-pendente', erro);
-      passo.querySelector('.quest-erro').hidden = !erro;
+      var aviso = passo.querySelector('.quest-erro');
+      aviso.dataset.padrao = aviso.dataset.padrao || aviso.textContent;
+      aviso.textContent = texto || aviso.dataset.padrao;
+      aviso.hidden = !erro;
     };
     var qValido = function (passo) {
       var ok = true;
       if (passo.hasAttribute('data-q-nome')) ok = !!passo.querySelector('input').value.trim();
       else if (passo.hasAttribute('data-q-aceite')) ok = passo.querySelector('input').checked;
       else if (passo.hasAttribute('data-obrigatoria')) ok = !!qValor(passo);
+      var sub = passo.hasAttribute('data-q') ? qSub(passo) : null;
+      if (ok && sub && !qSubValor(sub)) { qMarca(passo, true, 'Escolha qual.'); return false; }
       qMarca(passo, !ok);
       return ok;
     };
@@ -129,8 +142,17 @@
       if (campo) campo.focus({ preventScroll: true });
     };
     var qProximo = function () { if (qValido(qPassos[qAtual]) && qAtual < qPassos.length - 1) qMostra(qAtual + 1); };
-    var qAbrir = function (tipo) {
+    // extras (bloco de concursos): objetivo já marcado e o concurso escolhido já marcado no "Qual concurso?"
+    var qAbrir = function (tipo, extras) {
+      extras = extras || {};
       qTipo = qServicos[tipo] ? tipo : 'online';
+      if (extras.objetivo) {
+        qForm.querySelectorAll('[data-q] input[type="radio"]').forEach(function (r) { if (r.value === extras.objetivo) r.checked = true; });
+      }
+      if (extras.concurso) {
+        qForm.querySelectorAll('[data-sub] input[type="radio"]').forEach(function (r) { if (r.value === extras.concurso) r.checked = true; });
+      }
+      qForm.querySelectorAll('[data-q]').forEach(qSub);
       qm.querySelector('[data-qm-servico]').textContent = qServicos[qTipo].titulo;
       qEnviado.hidden = true;
       qm.querySelector('[data-qm-acoes]').hidden = false;
@@ -148,7 +170,12 @@
     };
 
     document.querySelectorAll('[data-quest-open]').forEach(function (botao) {
-      botao.addEventListener('click', function (e) { e.preventDefault(); qOrigem = botao; qAbrir(botao.dataset.questOpen); });
+      botao.addEventListener('click', function (e) {
+        e.preventDefault();
+        qOrigem = botao;
+        var escolhido = document.querySelector('[data-concurso-opcoes] input:checked');
+        qAbrir(botao.dataset.questOpen, { objetivo: botao.dataset.questObjetivo, concurso: botao.dataset.questOpen === 'concurso' && escolhido ? escolhido.value : '' });
+      });
     });
     qm.querySelectorAll('[data-qm-fechar]').forEach(function (b) { b.addEventListener('click', qFechar); });
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !qm.hidden) qFechar(); });
@@ -159,6 +186,12 @@
       var passo = qPassos[qAtual];
       if (passo.classList.contains('quest-pendente')) qMarca(passo, false);
       var tipo = passo.dataset.tipo;
+      if (passo.hasAttribute('data-q') && passo.querySelector('[data-sub]')) {
+        var sub = qSub(passo);
+        // escolheu a opção que abre a subpergunta: espera a escolha dela; escolheu na subpergunta: avança
+        if (sub && !sub.contains(e.target)) return;
+        if (sub && sub.contains(e.target)) { qAvanco = setTimeout(qProximo, 260); return; }
+      }
       if (tipo === 'sim_qual') {
         var sim = passo.querySelector('input[value="Sim"]').checked;
         var qual = passo.querySelector('[data-qual]');
@@ -181,6 +214,8 @@
       qForm.querySelectorAll('[data-q]').forEach(function (bloco) {
         var v = qValor(bloco);
         if (v) linhas.push(bloco.dataset.rotulo + ': ' + v);
+        var sub = qSub(bloco);
+        if (sub && qSubValor(sub)) linhas.push(sub.dataset.rotulo + ': ' + qSubValor(sub));
       });
       var url = 'https://wa.me/' + qm.dataset.numero + '?text=' + encodeURIComponent(linhas.join('\n'));
       qPassos.forEach(function (p) { p.hidden = true; });

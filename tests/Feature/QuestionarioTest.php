@@ -39,6 +39,22 @@ class QuestionarioTest extends TestCase
         $this->assertStringContainsString('data-wa-open', $html);
     }
 
+    public function test_bloco_de_concursos_abre_o_questionario_com_o_objetivo_marcado(): void
+    {
+        $r = $this->get('/')->assertOk()
+            ->assertSee('id="concursos"', false)
+            ->assertSee('Preparação para concurso com teste físico')
+            ->assertSee('href="'.route('home').'#concursos"', false); // link no menu
+        foreach (config('site.concurso.opcoes') as [$op]) {
+            $r->assertSee('value="'.$op.'"', false);
+        }
+        $r->assertSee('data-quest-open="concurso" data-quest-objetivo="Preparação para concurso com teste físico"', false)
+            ->assertSee('Quero me preparar para o teste físico de um concurso.');
+
+        // o objetivo marcado pelo bloco existe na pergunta 1 do questionário
+        $this->assertContains(config('site.concurso.objetivo'), config('site.questionario.0.opcoes'));
+    }
+
     public function test_endereco_questionario_abre_a_home_com_o_modal(): void
     {
         $this->get('/questionario?tipo=presencial')->assertRedirect('/?questionario=presencial');

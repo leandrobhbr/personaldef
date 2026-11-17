@@ -156,45 +156,34 @@
 
 <!-- COMO FUNCIONA -->
 <section id="como-funciona" style="background: #F1F1EC; border-top: 1px solid #E4E4DE; border-bottom: 1px solid #E4E4DE">
-  <div class="wrap sec" style="display: flex; flex-direction: column; gap: 56px">
-    <div style="display: flex; flex-wrap: wrap; gap: 48px; align-items: flex-end">
-      <div style="flex: 1 1 460px; min-width: 0; display: flex; flex-direction: column; gap: 14px">
-        <span class="tag">Como funciona a consultoria</span>
-        <h2 class="h2">Sua ficha de treino, do zero, feita só para você.</h2>
-      </div>
-      <p class="lead" style="flex: 1 1 420px; min-width: 0; color: #3B3D42">O treino é <strong>100% individualizado e montado do zero</strong> de acordo com a sua necessidade, rotina, limitações e objetivos — <strong>emagrecimento, hipertrofia ou saúde</strong>.</p>
+  <div class="wrap sec como">
+    <div class="como-texto">
+      <span class="tag">Como funciona a consultoria</span>
+      <h2 class="h2">Sua ficha de treino, do zero, feita só para você.</h2>
+      <p class="lead">100% individualizada para emagrecimento, hipertrofia ou saúde.</p>
+      <ol class="como-passos">
+        @foreach (config('site.passos') as $i => [$titulo, $texto])
+          <li><b>{{ $i + 1 }}</b><div><h3>{{ $titulo }}</h3><p>{{ $texto }}</p></div></li>
+        @endforeach
+      </ol>
+      <ul class="como-ficha" aria-label="O que vem na sua ficha">
+        @foreach (config('site.ficha') as [$icon, $label])
+          <li>@include('partials.icons.icon', ['name' => $icon, 'size' => 18])<span>{{ $label }}</span></li>
+        @endforeach
+      </ul>
+      <a class="btn btn-d btn-lg como-btn" href="{{ url('/app/') }}">@include('partials.icons.icon', ['name' => 'celular', 'size' => 20, 'class' => 'ic-acc'])Teste o aplicativo gratuitamente</a>
     </div>
-    <ol class="steps">
-      @foreach (config('site.passos') as $i => [$titulo, $texto])
-        <li>
-          <b>{{ str_pad($i + 1, 2, '0', STR_PAD_LEFT) }}</b>
-          <h3>{{ $titulo }}</h3>
-          <p>{{ $texto }}</p>
-        </li>
-      @endforeach
-    </ol>
-    <div class="ficha">
-      <div style="flex: 1 1 420px; min-width: 0; display: flex; flex-direction: column; gap: 20px">
-        <h3 style="font-weight: 800; font-size: 26px; line-height: 1.2">O que vem na sua ficha</h3>
-        <p style="font-size: 16px; color: #4A4C52">Cada exercício é explicado para que você saiba exatamente como treinar de forma segura — mesmo sem um personal ao lado. A ficha chega no celular, pronta para acompanhar o treino série por série.</p>
-        <div class="grid ficha-grid">
-          @foreach (config('site.ficha') as [$icon, $label])
-            <div class="ficha-item">@include('partials.icons.icon', ['name' => $icon, 'size' => 22])<span>{{ $label }}</span></div>
-          @endforeach
-        </div>
-      </div>
-      @include('partials.ficha-celular')
-    </div>
+    @include('partials.ficha-celular')
   </div>
 </section>
 
 <!-- TIPOS DE FICHA -->
 <section id="fichas" style="background: #FFFFFF; border-bottom: 1px solid #E4E4DE">
-  <div class="wrap sec" style="display: flex; flex-direction: column; gap: 48px">
+  <div class="wrap sec" style="display: flex; flex-direction: column; gap: 32px">
     <div style="display: flex; flex-direction: column; gap: 14px; max-width: 720px">
       <span class="tag">Tipos de ficha</span>
       <h2 class="h2">Qual divisão de treino combina com você?</h2>
-      <p class="lead">Na avaliação, Denilson escolhe a divisão ideal para a sua rotina e o seu objetivo.</p>
+      <p class="lead">O Denilson escolhe a certa para a sua rotina.</p>
     </div>
     <div class="tipos">
       @foreach (config('site.tipos_ficha') as $tipo)
@@ -207,16 +196,9 @@
               </figure>
             @endforeach
           </div>
-          <div style="padding: 28px; display: flex; flex-direction: column; gap: 14px; flex-grow: 1">
-            <div>
-              <h3>{{ $tipo['title'] }}</h3>
-              <span class="kicker">{{ $tipo['subtitle'] }}</span>
-            </div>
-            <p style="font-size: 15px; color: #4A4C52">{{ $tipo['what'] }}</p>
-            <dl class="tipo-info">
-              <div><dt>Frequência</dt><dd>{{ $tipo['freq'] }}</dd></div>
-              <div><dt>Indicado para</dt><dd>{{ $tipo['who'] }}</dd></div>
-            </dl>
+          <div class="tipo-corpo">
+            <h3>{{ $tipo['title'] }}</h3>
+            <p><b>{{ $tipo['freq'] }}</b> · {{ $tipo['who'] }}</p>
           </div>
         </article>
       @endforeach
@@ -225,9 +207,51 @@
       <span class="ibox ibox-acc">@include('partials.icons.icon', ['name' => 'celular', 'size' => 26])</span>
       <div style="flex: 1 1 320px; min-width: 0">
         <h3>Teste o aplicativo agora, sem cadastro</h3>
-        <p>As fichas gratuitas do Denilson estão liberadas no app: exercícios com imagem, séries, descanso e explicação. Quando quiser a sua ficha personalizada, ela chega no mesmo aplicativo.</p>
+        <p>Fichas gratuitas com a imagem de cada exercício.</p>
       </div>
       <a class="btn btn-d btn-lg" href="{{ url('/app/') }}">@include('partials.icons.icon', ['name' => 'celular', 'size' => 20, 'class' => 'ic-acc'])Abrir o aplicativo</a>
+    </div>
+  </div>
+</section>
+
+<!-- CONCURSOS: PREPARAÇÃO PARA O TESTE FÍSICO -->
+@php
+  $concurso = config('site.concurso');
+@endphp
+<section id="concursos" class="conc">
+  <div class="wrap sec" style="display: flex; flex-direction: column; gap: 40px">
+    <div style="display: flex; flex-wrap: wrap; gap: 32px 48px; align-items: flex-end">
+      <div style="flex: 1 1 460px; min-width: 0; display: flex; flex-direction: column; gap: 14px">
+        <span class="tag">Concursos</span>
+        <h2 class="h2">{{ $concurso['titulo'] }}</h2>
+      </div>
+      <p class="lead" style="flex: 1 1 420px; min-width: 0">Passar na prova escrita e reprovar no teste físico não é opção. O treino é montado a partir do <strong>seu edital</strong>, com as provas e os índices que você precisa bater no dia.</p>
+    </div>
+
+    <div class="conc-grid">
+      <div class="conc-card">
+        <h3 id="conc-qual">Qual concurso você vai prestar?</h3>
+        <div class="conc-opcoes" role="radiogroup" aria-labelledby="conc-qual" data-concurso-opcoes>
+          @foreach ($concurso['opcoes'] as [$op, $icone])
+            <label class="conc-op"><input type="radio" name="concurso" value="{{ $op }}"><span><i class="conc-ic">@include('partials.icons.icon', ['name' => $icone, 'size' => 18, 'weight' => 1.9])</i>{{ $op }}</span></label>
+          @endforeach
+        </div>
+        <p class="conc-sub">Provas mais cobradas nos testes físicos</p>
+        <ul class="conc-provas">
+          @foreach ($concurso['provas'] as $prova)<li>{{ $prova }}</li>@endforeach
+        </ul>
+        <p class="conc-nota">As provas e os índices mudam de edital para edital. O treino segue o seu.</p>
+      </div>
+
+      <div class="conc-card conc-card--escuro">
+        <ul class="conc-itens">
+          @foreach ($concurso['itens'] as [$titulo, $texto])
+            <li><span class="ibox ibox-acc">@include('partials.icons.icon', ['name' => 'check', 'size' => 18, 'weight' => 3])</span><div><strong>{{ $titulo }}</strong><p>{{ $texto }}</p></div></li>
+          @endforeach
+        </ul>
+        <a class="btn btn-lg conc-cta" href="{{ $wa($concurso['mensagem']) }}" target="_blank" rel="noopener" data-quest-open="concurso" data-quest-objetivo="{{ $concurso['objetivo'] }}">Solicitar orçamento</a>
+        <p class="conc-cta-nota">Responda o questionário em 1 minuto. Se já tiver o edital, mande junto no WhatsApp.</p>
+      </div>
     </div>
   </div>
 </section>

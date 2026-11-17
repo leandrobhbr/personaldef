@@ -162,30 +162,32 @@ return [
     */
 
     'passos' => [
-        ['Chame no WhatsApp', 'Nosso assistente agenda automaticamente sua conversa inicial, no horário que for melhor para você.'],
-        ['Avaliação completa', 'Mapeamos sua rotina, histórico, limitações, lesões, equipamentos disponíveis e o objetivo que você quer alcançar.'],
-        ['Ficha montada do zero', 'Denilson desenha seu plano com a metodologia europeia — nada de modelo pronto ou ficha genérica.'],
-        ['Receba no aplicativo', 'Sua ficha chega no aplicativo Personal DEF: toque no link que o Denilson manda no WhatsApp e treine com o celular na mão.'],
+        ['Questionário', 'Objetivo, rotina e limitações em 1 minuto.'],
+        ['Avaliação', 'Uma conversa para entender você.'],
+        ['Ficha do zero', 'Montada pelo Denilson, sem modelo pronto.'],
+        ['No aplicativo', 'No seu celular, com o GIF de cada exercício.'],
     ],
 
     'ficha' => [
-        ['halter', 'Nome de cada exercício'],
+        ['execucao', 'GIF de cada exercício'],
         ['lista', 'Séries e repetições'],
-        ['relogio', 'Tempo de descanso'],
-        ['execucao', 'Execução passo a passo'],
+        ['relogio', 'Descanso'],
+        ['halter', 'Execução passo a passo'],
     ],
 
     // Ficha de exemplo mostrada no celular da seção "Como funciona"
+    // [nome, séries, repetições, descanso, dica, vídeo em public/images/ficha-celular/{vídeo}.mp4|.jpg]
+    // (os vídeos são os GIFs do app convertidos em mp4 de 160 px: poucos KB em vez de MB)
     'ficha_exemplo' => [
         'treino' => 'Treino A',
         'foco' => 'Peito e tríceps',
         'semana' => 'Semana 3 de 8',
+        'feitos' => 2,
         'exercicios' => [
-            ['Supino reto com barra', 4, '8–10', '90s', null],
-            ['Supino inclinado com halteres', 3, '10–12', '75s', null],
-            ['Crucifixo na máquina', 3, '12', '60s', 'Cotovelos levemente flexionados; feche os braços em 2 segundos e volte devagar, sem deixar o peso bater.'],
-            ['Tríceps na polia com corda', 3, '12–15', '60s', null],
-            ['Tríceps francês com halter', 3, '10–12', '60s', null],
+            ['Supino reto com barra', 4, '8–10', '90s', null, 'supino-reto'],
+            ['Supino inclinado na máquina', 3, '10–12', '75s', null, 'supino-inclinado-maquina'],
+            ['Voador no pec deck', 3, '12', '60s', 'Feche os braços em 2 segundos e volte devagar.', 'voador'],
+            ['Tríceps na polia com corda', 3, '12–15', '60s', null, 'triceps-corda'],
         ],
     ],
 
@@ -202,52 +204,43 @@ return [
     'tipos_ficha' => [
         [
             'title' => 'Full Body',
-            'subtitle' => 'Corpo inteiro',
             'days' => [
                 ['Todos', 'Corpo todo', 'images/fichas/full-body.webp', '50% 35%'],
             ],
-            'what' => 'Todos os grandes grupos musculares no mesmo treino.',
-            'freq' => '2 a 3 vezes por semana',
-            'who' => 'Iniciantes, quem tem pouco tempo ou está voltando a treinar.',
+            'freq' => '2 a 3x por semana',
+            'who' => 'Iniciantes e pouco tempo',
         ],
         [
             'title' => 'AB',
-            'subtitle' => 'Superior e inferior (ou Push/Pull)',
             'days' => [
                 ['A', 'Superiores', 'images/fichas/superiores.webp', '50% 30%'],
                 ['B', 'Inferiores', 'images/fichas/inferiores.webp', '50% 25%'],
             ],
-            'what' => 'Superiores em um dia e inferiores no outro (ou empurrar e puxar).',
-            'freq' => '2 a 4 vezes por semana',
-            'who' => 'Iniciantes em evolução e intermediários com rotina apertada.',
+            'freq' => '2 a 4x por semana',
+            'who' => 'Rotina apertada',
         ],
         [
             'title' => 'ABC',
-            'subtitle' => 'Três treinos diferentes',
             'days' => [
                 ['A', 'Peito e tríceps', 'images/fichas/peito-triceps.webp', '50% 40%'],
                 ['B', 'Costas e bíceps', 'images/fichas/costas-biceps.webp', '50% 40%'],
                 ['C', 'Pernas e ombros', 'images/fichas/pernas-ombros.webp', '40% 50%'],
             ],
-            'what' => 'Três treinos diferentes, como peito e tríceps, costas e bíceps, pernas e ombros.',
-            'freq' => '3 a 5 vezes por semana',
-            'who' => 'Intermediários com foco em hipertrofia.',
+            'freq' => '3 a 5x por semana',
+            'who' => 'Foco em hipertrofia',
         ],
         [
             'title' => 'Push / Pull / Legs',
-            'subtitle' => 'Empurrar / Puxar / Pernas',
             'days' => [
                 ['Push', 'Peito, ombro, tríceps', 'images/fichas/push.webp', '50% 60%'],
                 ['Pull', 'Costas e bíceps', 'images/fichas/pull.webp', '50% 40%'],
                 ['Legs', 'Pernas completas', 'images/fichas/legs.webp', '45% 60%'],
             ],
-            'what' => 'Treinos pelo tipo de movimento: empurrar, puxar e pernas.',
-            'freq' => '3 a 6 vezes por semana',
-            'who' => 'Intermediários e avançados que querem otimizar o descanso muscular.',
+            'freq' => '3 a 6x por semana',
+            'who' => 'Intermediários e avançados',
         ],
         [
             'title' => 'ABCD ou ABCDE',
-            'subtitle' => 'Um grupo por dia',
             'days' => [
                 ['A', 'Peito', 'images/fichas/peito.webp', '50% 60%'],
                 ['B', 'Costas', 'images/fichas/costas.webp', '50% 40%'],
@@ -255,9 +248,8 @@ return [
                 ['D', 'Braços', 'images/fichas/bracos.webp', '35% 40%'],
                 ['E', 'Pernas', 'images/fichas/pernas.webp', '55% 60%'],
             ],
-            'what' => 'Um grupo muscular por dia: peito, costas, ombros, braços e pernas.',
-            'freq' => '4 a 6 vezes por semana',
-            'who' => 'Intermediários e avançados que treinam com alta intensidade.',
+            'freq' => '4 a 6x por semana',
+            'who' => 'Treino de alta intensidade',
         ],
     ],
 
@@ -388,6 +380,39 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Preparação para concurso com teste físico (bloco #concursos da home)
+    |--------------------------------------------------------------------------
+    |
+    | O botão abre o questionário com o objetivo já marcado e o concurso escolhido
+    | numa linha a mais da mensagem ("Concurso: Polícia Militar").
+    |
+    */
+
+    'concurso' => [
+        'titulo' => 'Preparação para concurso com teste físico',
+        'objetivo' => 'Preparação para concurso com teste físico', // mesma opção da pergunta 1 do questionário
+        'mensagem' => 'Olá Denilson! Quero me preparar para o teste físico de um concurso.',
+        // [concurso, ícone de partials/icons/icon (símbolos genéricos, sem brasão das corporações)]
+        'opcoes' => [
+            ['Polícia Militar', 'escudo'],
+            ['Polícia Civil', 'distintivo'],
+            ['Polícia Federal / PRF', 'rodovia'],
+            ['Polícia Penal', 'grade'],
+            ['Corpo de Bombeiros', 'chama'],
+            ['Guarda Civil Municipal', 'predio'],
+            ['Forças Armadas', 'estrela'],
+            ['Outro concurso', 'prancheta'],
+        ],
+        'provas' => ['Barra fixa', 'Flexão de braço', 'Abdominal', 'Corrida de 12 minutos', 'Corrida de velocidade', 'Corrida de vai e vem', 'Natação', 'Salto'],
+        'itens' => [
+            ['Treino a partir do edital', 'Provas, índices exigidos para o seu sexo e idade e a data do teste.'],
+            ['Progressão até a prova', 'Fases de base, força e ritmo, com a ficha ajustada até o dia do teste.'],
+            ['Online ou presencial', 'Ficha no aplicativo para todo o Brasil ou acompanhamento em Marília/SP.'],
+        ],
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Questionário dos serviços (modal na home: partials/questionario-modal)
     |--------------------------------------------------------------------------
     |
@@ -401,7 +426,9 @@ return [
 
     'questionario' => [
         ['rotulo' => 'Objetivo', 'pergunta' => 'Qual é o seu principal objetivo?', 'tipo' => 'opcoes',
-            'opcoes' => ['Emagrecer', 'Ganhar massa muscular', 'Condicionamento', 'Saúde e qualidade de vida', 'Voltar a treinar após lesão', 'Outro']],
+            'opcoes' => ['Emagrecer', 'Ganhar massa muscular', 'Condicionamento', 'Saúde e qualidade de vida', 'Voltar a treinar após lesão', 'Preparação para concurso com teste físico', 'Outro'],
+            // subpergunta: aparece quando o objetivo é concurso (opções = config('site.concurso.opcoes'))
+            'sub' => ['quando' => 'Preparação para concurso com teste físico', 'rotulo' => 'Concurso', 'pergunta' => 'Qual concurso?']],
         ['rotulo' => 'Idade/peso/altura', 'pergunta' => 'Sua idade, peso e altura', 'tipo' => 'medidas'],
         ['rotulo' => 'Experiência', 'pergunta' => 'Há quanto tempo você treina musculação?', 'tipo' => 'opcoes',
             'opcoes' => ['Nunca treinei', 'Parado(a) há mais de 6 meses', 'Menos de 1 ano', '1 a 3 anos', 'Mais de 3 anos']],

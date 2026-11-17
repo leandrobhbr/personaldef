@@ -9,13 +9,16 @@
       <div class="cel-head">
         <span class="kicker">{{ $f['treino'] }}</span>
         <b>{{ $f['foco'] }}</b>
-        <div class="cel-prog"><i style="width: 40%"></i></div>
-        <small>2 de 5 exercícios concluídos</small>
+        <div class="cel-prog"><i style="width: {{ round($f['feitos'] / count($f['exercicios']) * 100) }}%"></i></div>
+        <small>{{ $f['feitos'] }} de {{ count($f['exercicios']) }} exercícios concluídos</small>
       </div>
       <ol class="cel-lista">
-        @foreach ($f['exercicios'] as $i => [$nome, $series, $reps, $descanso, $dica])
-          <li @class(['feito' => $i < 2, 'atual' => $i === 2])>
-            <span class="cel-n">@if ($i < 2)@include('partials.icons.icon', ['name' => 'check', 'size' => 13, 'weight' => 3.2])@else{{ $i + 1 }}@endif</span>
+        @foreach ($f['exercicios'] as $i => [$nome, $series, $reps, $descanso, $dica, $video])
+          <li @class(['feito' => $i < $f['feitos'], 'atual' => $i === $f['feitos']])>
+            <span class="cel-gif">
+              <video src="{{ asset('images/ficha-celular/'.$video.'.mp4') }}" poster="{{ asset('images/ficha-celular/'.$video.'.jpg') }}" width="52" height="52" autoplay muted loop playsinline preload="none"></video>
+              <span class="cel-n">@if ($i < $f['feitos'])@include('partials.icons.icon', ['name' => 'check', 'size' => 11, 'weight' => 3.2])@else{{ $i + 1 }}@endif</span>
+            </span>
             <div>
               <strong>{{ $nome }}</strong>
               <div class="cel-chips"><span>{{ $series }} séries</span><span>{{ $reps }} reps</span><span>@include('partials.icons.icon', ['name' => 'relogio', 'size' => 11, 'weight' => 2.4]){{ $descanso }}</span></div>
