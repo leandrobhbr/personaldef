@@ -14,7 +14,7 @@
     <div class="wam-head">
       <div>
         <p class="qm-servico" data-qm-servico>{{ $qmServicos['online']['titulo'] ?? '' }}</p>
-        <h2 id="qm-titulo" class="qm-titulo">Orçamento em 1 minuto</h2>
+        <h2 id="qm-titulo" class="qm-titulo">Responda o questionário em 1 minuto</h2>
       </div>
       <button type="button" class="wam-close" data-qm-fechar aria-label="Fechar">@include('partials.icons.icon', ['name' => 'fechar', 'size' => 20, 'weight' => 2.5])</button>
     </div>
